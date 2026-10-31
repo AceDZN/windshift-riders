@@ -1,0 +1,23 @@
+{
+  "method": "Technical final-stage transfer witness through actual pointer controls and default arcadeInput/landing assistance; not a naive-play or fun claim.",
+  "errors": [],
+  "checks": [
+    {
+      "check": "actual touch UP climbs and release levels bank at390x844",
+      "pass": true
+    }
+  ],
+  "finalStage": {
+    "mode": "landed",
+    "time": 94.23,
+    "gate": 2,
+    "medals": {
+      "finish": true,
+      "control": true,
+      "environment": true
+    },
+    "cleanPasses": 2,
+    "landingHelpUsed": true
+  },
+  "complete": true
+}

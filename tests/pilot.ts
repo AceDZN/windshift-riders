@@ -87,3 +87,20 @@ export function directPilot(s:FlightState,l:Level,m:PilotMemory):Input {
  const g=l.gates[s.gate];
  return g?{bank:steer(s,l,g.x,g.z),pitch:0,brake:false}:pilot(s,l,m);
 }
+
+/** Default-input witness: follow a windward ridge, then spend speed reserve over a crest. */
+export function runtimePilot(s:FlightState,l:Level,m:PilotMemory):Input {
+ const g=l.gates[s.gate];
+ if(g&&s.gate>0&&m.stage!==s.gate){
+  let pathGround=0;
+  for(let t=.1;t<=1;t+=.1)pathGround=Math.max(pathGround,terrainHeight(l,s.x+(g.x-s.x)*t,s.z+(g.z-s.z)*t));
+  const safeY=Math.max(g.y+g.r*.55,pathGround+35);
+  if(s.y>=safeY-25){m.stage=s.gate;m.anchor=undefined;m.phase='depart';}
+ }
+ const hasLaunchThermal=!l.night&&l.patches.some(p=>p.sun>.4&&p.moisture<.6&&Math.hypot(p.x-l.launch.x,p.z-l.launch.z)<350);
+ if(l.decision==='ridge'&&s.gate===0&&g&&!hasLaunchThermal){
+  const direct=directPilot(s,l,m);
+  return {...direct,pitch:clamp((g.y-s.y)/Math.max(1,Math.hypot(g.x-s.x,g.z-s.z))*.75,0,.15)};
+ }
+ return pilot(s,l,m);
+}

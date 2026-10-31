@@ -1,3 +1,5 @@
+// Historical first-build harness: bindings, drag scaling and assist expectations predate the usability revision.
+// For the current game run tests/usability-revision.ts and tests/browser-transfer.ts instead.
 import {chromium} from 'playwright';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';

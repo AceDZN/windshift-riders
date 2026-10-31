@@ -1,0 +1,341 @@
+[
+  {
+    "name": "coast-day-final",
+    "errors": [],
+    "state": {
+      "mode": "flying",
+      "level": 1,
+      "name": "כנפיים ראשונות",
+      "coordinates": "x east, y altitude metres, z south; heading0 north (-z)",
+      "player": {
+        "x": 1.95,
+        "y": 149.13,
+        "z": 161.4,
+        "heading": 0.137,
+        "bank": 0.062,
+        "pitch": 0,
+        "speed": 28,
+        "verticalSpeed": -1.2
+      },
+      "time": 0.67,
+      "gate": 0,
+      "gates": [
+        {
+          "x": -35,
+          "y": 145,
+          "z": 40,
+          "r": 65
+        },
+        {
+          "x": 55,
+          "y": 135,
+          "z": -150,
+          "r": 75
+        },
+        {
+          "x": 0,
+          "y": 120,
+          "z": -345,
+          "r": 80
+        }
+      ],
+      "landing": {
+        "x": 0,
+        "z": -590,
+        "r": 100
+      },
+      "objective": "כוונו אל המעבר הזהוב",
+      "controls": "Arrow/W up=climb; Arrow/S down=dive; Left/A Right/D=gentle turn; drag upward=climb; release=level wings",
+      "selectedTool": "glider",
+      "input": {
+        "bank": 0,
+        "pitch": 0,
+        "brake": false
+      },
+      "landingMode": "off",
+      "autoLandingEnabled": true,
+      "landingHelpUsed": false,
+      "air": {
+        "lift": 4.264497196975044e-14,
+        "thermal": 4.264497196975044e-14,
+        "ridge": 0,
+        "windX": 1,
+        "windZ": 0,
+        "sun": 1,
+        "shadow": 0,
+        "source": "קרקע יבשה · שמש ישירה"
+      },
+      "ground": 21.219694531806407,
+      "patches": [
+        {
+          "x": 280,
+          "z": -200,
+          "moisture": 0.08,
+          "sun": 1,
+          "label": "קרקע יבשה · שמש ישירה"
+        }
+      ],
+      "overlay": true,
+      "usedHint": false,
+      "assist": false,
+      "score": 30,
+      "combo": 1,
+      "cleanPasses": 0,
+      "reward": "",
+      "medals": {
+        "finish": false,
+        "control": false,
+        "environment": false
+      },
+      "modelLoaded": true,
+      "modelError": "",
+      "fps": 60,
+      "progress": {
+        "1": {
+          "score": 0,
+          "medals": {
+            "finish": false,
+            "control": false,
+            "environment": false
+          },
+          "attempts": 0,
+          "starts": 1,
+          "retries": 0,
+          "hintedRuns": 0,
+          "assistedRuns": 0,
+          "lastRuns": [],
+          "firstRun": {
+            "outcome": "in-progress",
+            "hinted": false,
+            "assisted": false,
+            "decision": false,
+            "gates": 0,
+            "seconds": 0
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "coast-night-final",
+    "errors": [],
+    "state": {
+      "mode": "flying",
+      "level": 14,
+      "name": "בריזת לילה",
+      "coordinates": "x east, y altitude metres, z south; heading0 north (-z)",
+      "player": {
+        "x": -72.92,
+        "y": 174.21,
+        "z": 163.27,
+        "heading": 0.137,
+        "bank": 0.062,
+        "pitch": 0,
+        "speed": 28,
+        "verticalSpeed": -1.2
+      },
+      "time": 0.6,
+      "gate": 0,
+      "gates": [
+        {
+          "x": -50,
+          "y": 135,
+          "z": -320,
+          "r": 55
+        }
+      ],
+      "landing": {
+        "x": -50,
+        "z": -850,
+        "r": 70
+      },
+      "objective": "כוונו אל המעבר הזהוב",
+      "controls": "Arrow/W up=climb; Arrow/S down=dive; Left/A Right/D=gentle turn; drag upward=climb; release=level wings",
+      "selectedTool": "glider",
+      "input": {
+        "bank": 0,
+        "pitch": 0,
+        "brake": false
+      },
+      "landingMode": "off",
+      "autoLandingEnabled": true,
+      "landingHelpUsed": false,
+      "air": {
+        "lift": 0,
+        "thermal": 0,
+        "ridge": 0,
+        "windX": -7,
+        "windZ": 0,
+        "sun": 0,
+        "shadow": 0,
+        "source": "אוויר שקט"
+      },
+      "ground": 16.983894368828302,
+      "patches": [
+        {
+          "x": -70,
+          "z": -200,
+          "moisture": 0.1,
+          "sun": 0,
+          "label": "קרקע בצל · מעט קרינה"
+        }
+      ],
+      "overlay": false,
+      "usedHint": false,
+      "assist": false,
+      "score": 28,
+      "combo": 1,
+      "cleanPasses": 0,
+      "reward": "",
+      "medals": {
+        "finish": false,
+        "control": false,
+        "environment": false
+      },
+      "modelLoaded": true,
+      "modelError": "",
+      "fps": 60,
+      "progress": {
+        "14": {
+          "score": 0,
+          "medals": {
+            "finish": false,
+            "control": false,
+            "environment": false
+          },
+          "attempts": 0,
+          "starts": 1,
+          "retries": 0,
+          "hintedRuns": 0,
+          "assistedRuns": 0,
+          "lastRuns": [],
+          "firstRun": {
+            "outcome": "in-progress",
+            "hinted": false,
+            "assisted": false,
+            "decision": false,
+            "gates": 0,
+            "seconds": 0
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "mobile-coast-final",
+    "errors": [],
+    "state": {
+      "mode": "flying",
+      "level": 1,
+      "name": "כנפיים ראשונות",
+      "coordinates": "x east, y altitude metres, z south; heading0 north (-z)",
+      "player": {
+        "x": 0.25,
+        "y": 149.7,
+        "z": 173,
+        "heading": 0,
+        "bank": 0,
+        "pitch": 0,
+        "speed": 28,
+        "verticalSpeed": -1.2
+      },
+      "time": 0.25,
+      "gate": 0,
+      "gates": [
+        {
+          "x": -35,
+          "y": 145,
+          "z": 40,
+          "r": 65
+        },
+        {
+          "x": 55,
+          "y": 135,
+          "z": -150,
+          "r": 75
+        },
+        {
+          "x": 0,
+          "y": 120,
+          "z": -345,
+          "r": 80
+        }
+      ],
+      "landing": {
+        "x": 0,
+        "z": -590,
+        "r": 100
+      },
+      "objective": "כוונו אל המעבר הזהוב",
+      "controls": "Arrow/W up=climb; Arrow/S down=dive; Left/A Right/D=gentle turn; drag upward=climb; release=level wings",
+      "selectedTool": "glider",
+      "input": {
+        "bank": 0,
+        "pitch": 0,
+        "brake": false
+      },
+      "landingMode": "off",
+      "autoLandingEnabled": true,
+      "landingHelpUsed": false,
+      "air": {
+        "lift": 9.37544599413979e-15,
+        "thermal": 9.37544599413979e-15,
+        "ridge": 0,
+        "windX": 1,
+        "windZ": 0,
+        "sun": 1,
+        "shadow": 0,
+        "source": "קרקע יבשה · שמש ישירה"
+      },
+      "ground": 21.20948632090998,
+      "patches": [
+        {
+          "x": 280,
+          "z": -200,
+          "moisture": 0.08,
+          "sun": 1,
+          "label": "קרקע יבשה · שמש ישירה"
+        }
+      ],
+      "overlay": true,
+      "usedHint": false,
+      "assist": false,
+      "score": 11,
+      "combo": 1,
+      "cleanPasses": 0,
+      "reward": "",
+      "medals": {
+        "finish": false,
+        "control": false,
+        "environment": false
+      },
+      "modelLoaded": true,
+      "modelError": "",
+      "fps": 60,
+      "progress": {
+        "1": {
+          "score": 0,
+          "medals": {
+            "finish": false,
+            "control": false,
+            "environment": false
+          },
+          "attempts": 0,
+          "starts": 1,
+          "retries": 0,
+          "hintedRuns": 0,
+          "assistedRuns": 0,
+          "lastRuns": [],
+          "firstRun": {
+            "outcome": "in-progress",
+            "hinted": false,
+            "assisted": false,
+            "decision": false,
+            "gates": 0,
+            "seconds": 0
+          }
+        }
+      }
+    }
+  }
+]

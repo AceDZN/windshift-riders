@@ -9,19 +9,19 @@
     "height": 900
   },
   "renderer": "Chromium Metal on this Mac",
-  "resourceTransferBytes": 2507799,
+  "resourceTransferBytes": 2520399,
   "externalRequests": [],
   "errors": [],
   "resources": [
     {
-      "name": "http://localhost:4301/assets/index-BPDXZJiF.js",
-      "transferSize": 173669,
-      "encodedBodySize": 173369
+      "name": "http://localhost:4301/assets/index-CvF8Kgax.js",
+      "transferSize": 185151,
+      "encodedBodySize": 184851
     },
     {
-      "name": "http://localhost:4301/assets/index-DDTJQgYA.css",
-      "transferSize": 3250,
-      "encodedBodySize": 2950
+      "name": "http://localhost:4301/assets/index-CEbFzYoP.css",
+      "transferSize": 4368,
+      "encodedBodySize": 4068
     },
     {
       "name": "http://localhost:4301/models/sailplane.glb",

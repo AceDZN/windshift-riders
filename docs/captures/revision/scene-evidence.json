@@ -1,0 +1,302 @@
+[
+  {
+    "name": "coast-day",
+    "errors": [],
+    "state": {
+      "mode": "flying",
+      "level": 1,
+      "name": "כנפיים ראשונות",
+      "coordinates": "x east, y altitude metres, z south; heading0 north (-z)",
+      "player": {
+        "x": 3.68,
+        "y": 148.87,
+        "z": 157.4,
+        "heading": 0.227,
+        "bank": 0.038,
+        "speed": 28,
+        "verticalSpeed": -1.2
+      },
+      "time": 0.82,
+      "gate": 0,
+      "gates": [
+        {
+          "x": -35,
+          "y": 145,
+          "z": 40,
+          "r": 65
+        },
+        {
+          "x": 55,
+          "y": 135,
+          "z": -150,
+          "r": 75
+        },
+        {
+          "x": 0,
+          "y": 120,
+          "z": -345,
+          "r": 80
+        }
+      ],
+      "landing": {
+        "x": 0,
+        "z": -590,
+        "r": 100
+      },
+      "objective": "עברו בין דגלי הבד",
+      "selectedTool": "glider",
+      "air": {
+        "lift": 7.875255332258532e-14,
+        "thermal": 7.875255332258532e-14,
+        "ridge": 0,
+        "windX": 1,
+        "windZ": 0,
+        "sun": 1,
+        "shadow": 0,
+        "source": "קרקע יבשה · שמש ישירה"
+      },
+      "ground": 21.316237332271825,
+      "patches": [
+        {
+          "x": 280,
+          "z": -200,
+          "moisture": 0.08,
+          "sun": 1,
+          "label": "קרקע יבשה · שמש ישירה"
+        }
+      ],
+      "overlay": true,
+      "usedHint": false,
+      "assist": false,
+      "score": 35,
+      "medals": {
+        "finish": false,
+        "control": false,
+        "environment": false
+      },
+      "modelLoaded": true,
+      "modelError": "",
+      "fps": 14,
+      "progress": {
+        "1": {
+          "score": 0,
+          "medals": {
+            "finish": false,
+            "control": false,
+            "environment": false
+          },
+          "attempts": 0,
+          "starts": 1,
+          "retries": 0,
+          "hintedRuns": 0,
+          "assistedRuns": 0,
+          "lastRuns": [],
+          "firstRun": {
+            "outcome": "in-progress",
+            "hinted": false,
+            "assisted": false,
+            "decision": false,
+            "gates": 0,
+            "seconds": 0
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "coast-night",
+    "errors": [],
+    "state": {
+      "mode": "flying",
+      "level": 14,
+      "name": "בריזת לילה",
+      "coordinates": "x east, y altitude metres, z south; heading0 north (-z)",
+      "player": {
+        "x": -72.97,
+        "y": 173.85,
+        "z": 156.93,
+        "heading": 0.227,
+        "bank": 0.038,
+        "speed": 28,
+        "verticalSpeed": -1.2
+      },
+      "time": 0.83,
+      "gate": 0,
+      "gates": [
+        {
+          "x": -50,
+          "y": 135,
+          "z": -320,
+          "r": 55
+        }
+      ],
+      "landing": {
+        "x": -50,
+        "z": -850,
+        "r": 70
+      },
+      "objective": "עברו בין דגלי הבד",
+      "selectedTool": "glider",
+      "air": {
+        "lift": 0,
+        "thermal": 0,
+        "ridge": 0,
+        "windX": -7,
+        "windZ": 0,
+        "sun": 0,
+        "shadow": 0,
+        "source": "אוויר שקט"
+      },
+      "ground": 16.974436576797256,
+      "patches": [
+        {
+          "x": -70,
+          "z": -200,
+          "moisture": 0.1,
+          "sun": 0,
+          "label": "קרקע בצל · מעט קרינה"
+        }
+      ],
+      "overlay": false,
+      "usedHint": false,
+      "assist": false,
+      "score": 39,
+      "medals": {
+        "finish": false,
+        "control": false,
+        "environment": false
+      },
+      "modelLoaded": true,
+      "modelError": "",
+      "fps": 60,
+      "progress": {
+        "14": {
+          "score": 0,
+          "medals": {
+            "finish": false,
+            "control": false,
+            "environment": false
+          },
+          "attempts": 0,
+          "starts": 1,
+          "retries": 0,
+          "hintedRuns": 0,
+          "assistedRuns": 0,
+          "lastRuns": [],
+          "firstRun": {
+            "outcome": "in-progress",
+            "hinted": false,
+            "assisted": false,
+            "decision": false,
+            "gates": 0,
+            "seconds": 0
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "mobile-coast",
+    "errors": [],
+    "state": {
+      "mode": "flying",
+      "level": 1,
+      "name": "כנפיים ראשונות",
+      "coordinates": "x east, y altitude metres, z south; heading0 north (-z)",
+      "player": {
+        "x": 0.4,
+        "y": 149.52,
+        "z": 168.8,
+        "heading": 0,
+        "bank": 0,
+        "speed": 28,
+        "verticalSpeed": -1.2
+      },
+      "time": 0.4,
+      "gate": 0,
+      "gates": [
+        {
+          "x": -35,
+          "y": 145,
+          "z": 40,
+          "r": 65
+        },
+        {
+          "x": 55,
+          "y": 135,
+          "z": -150,
+          "r": 75
+        },
+        {
+          "x": 0,
+          "y": 120,
+          "z": -345,
+          "r": 80
+        }
+      ],
+      "landing": {
+        "x": 0,
+        "z": -590,
+        "r": 100
+      },
+      "objective": "עברו בין דגלי הבד",
+      "selectedTool": "glider",
+      "air": {
+        "lift": 1.5642759269434097e-14,
+        "thermal": 1.5642759269434097e-14,
+        "ridge": 0,
+        "windX": 1,
+        "windZ": 0,
+        "sun": 1,
+        "shadow": 0,
+        "source": "קרקע יבשה · שמש ישירה"
+      },
+      "ground": 21.171671553938733,
+      "patches": [
+        {
+          "x": 280,
+          "z": -200,
+          "moisture": 0.08,
+          "sun": 1,
+          "label": "קרקע יבשה · שמש ישירה"
+        }
+      ],
+      "overlay": true,
+      "usedHint": false,
+      "assist": false,
+      "score": 18,
+      "medals": {
+        "finish": false,
+        "control": false,
+        "environment": false
+      },
+      "modelLoaded": true,
+      "modelError": "",
+      "fps": 60,
+      "progress": {
+        "1": {
+          "score": 0,
+          "medals": {
+            "finish": false,
+            "control": false,
+            "environment": false
+          },
+          "attempts": 0,
+          "starts": 1,
+          "retries": 0,
+          "hintedRuns": 0,
+          "assistedRuns": 0,
+          "lastRuns": [],
+          "firstRun": {
+            "outcome": "in-progress",
+            "hinted": false,
+            "assisted": false,
+            "decision": false,
+            "gates": 0,
+            "seconds": 0
+          }
+        }
+      }
+    }
+  }
+]

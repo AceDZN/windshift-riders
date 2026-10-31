@@ -1,0 +1,114 @@
+{
+  "method": "Naive opening controls, no numerical route pilot, no hints or flight-state injection. This tests accessibility and clarity, not human enjoyment.",
+  "opening": [
+    {
+      "id": 1,
+      "controls": "Launch, no input",
+      "goals": [
+        {
+          "time": 5.5,
+          "count": 1,
+          "feedback": "עברתם! +750",
+          "objective": "כוונו אל המעבר הזהוב"
+        },
+        {
+          "time": 13,
+          "count": 2,
+          "feedback": "עברתם! +750",
+          "objective": "כוונו אל המעבר הזהוב"
+        },
+        {
+          "time": 19,
+          "count": 3,
+          "feedback": "מעבר מושלם! +1,000",
+          "objective": "הטיסה הושלמה — בדרך לנחיתה"
+        }
+      ],
+      "approachVisible": true,
+      "mode": "landed",
+      "time": 28.78,
+      "medals": {
+        "finish": true,
+        "control": true,
+        "environment": true
+      },
+      "firstRun": {
+        "outcome": "landed",
+        "hinted": false,
+        "assisted": false,
+        "decision": true,
+        "gates": 3,
+        "seconds": 28.8,
+        "landingHelp": true
+      }
+    },
+    {
+      "id": 2,
+      "controls": "One .2s Left tap, then release",
+      "goals": [
+        {
+          "time": 5.7,
+          "count": 1,
+          "feedback": "מעבר מושלם! +1,000",
+          "objective": "כוונו אל המעבר הזהוב"
+        },
+        {
+          "time": 13.7,
+          "count": 2,
+          "feedback": "מעבר מושלם! +1,000",
+          "objective": "כוונו אל המעבר הזהוב"
+        },
+        {
+          "time": 22.2,
+          "count": 3,
+          "feedback": "מעבר מושלם! +1,000",
+          "objective": "הטיסה הושלמה — בדרך לנחיתה"
+        }
+      ],
+      "approachVisible": true,
+      "mode": "landed",
+      "time": 33.63,
+      "medals": {
+        "finish": true,
+        "control": true,
+        "environment": true
+      },
+      "firstRun": {
+        "outcome": "landed",
+        "hinted": false,
+        "assisted": false,
+        "decision": true,
+        "gates": 3,
+        "seconds": 33.6,
+        "landingHelp": true
+      }
+    }
+  ],
+  "controls": [
+    {
+      "check": "actual Up key climbs",
+      "pass": true,
+      "deltaY": 5.759999999999991
+    },
+    {
+      "check": "drag upward climbs and release recentres",
+      "pass": true
+    },
+    {
+      "check": "half-second turn releases without large continued yaw",
+      "pass": true,
+      "releaseHeading": 0.16,
+      "settledHeading": 0.206
+    },
+    {
+      "check": "visible manual-landing override cancels assistance",
+      "pass": true
+    },
+    {
+      "check": "obvious mistake produces safe failure and R immediate retry",
+      "pass": true
+    }
+  ],
+  "errors": [],
+  "complete": true
+}

@@ -2,7 +2,36 @@
 
 31 October 2026. Tests and outcomes are recorded here as they run. A planned check is not a passed check. Browser captures must use actual flight controls; no injected finish states count as gameplay evidence. Pure simulation route controllers may set the initial mode to flying and then supply only valid bank/pitch/brake input.
 
-## Review status
+## Usability reopened after human playtest
+
+The human player reported that the first build felt confusing, boring and too hard. The prior route-controller tests established mathematical feasibility, not intuitive controls or fun. That distinction was not tested sufficiently in the first acceptance pass. The earlier results below remain historical technical evidence and do not establish usability of the revised game.
+
+An independent naive-input browser pass against the stable first build used no numerical pilot, hints or flight-state injection:
+
+- Neutral flight passes stage1's gate by12s, but the thermal then lifts the glider. At30s the glider is193m high and has passed the meadow; the landing marker is now124m behind. The player has succeeded at the visible passage yet receives no clear transition to a manageable finish.
+- Pressing Up for1s, a natural expectation of climbing, instead drops altitude from150m to137m and increases airspeed from28m/s to31.53m/s.
+- Holding Right for0.5s rotates heading12.7°. After release the delayed bank adds another8°; a90px right drag held for2s turns84.3°.
+- The scene shows a small pair of flags with altitude tolerance, followed by a landing task requiring an unintroduced descent/braking plan. The HUD does not explain the missing height plan. A route controller solved this with a braking spiral, which is not an appropriate first-minute learner requirement.
+
+Baseline script: `tests/usability-baseline.ts`. Raw report and inspected screenshots: `tests/captures/usability-v1/` (local QA artifacts). The revision was checked separately for naive first1/2 controls without optional hints, readable progressive goals, immediate feedback, forgiving failure/retry, meaningful field invariants and a final-stage transfer route; current outcomes follow below. Old autopilot witnesses will not be used as proof that the revision is intuitive or enjoyable. No claim of student usability or learning gains is justified without people testing it.
+
+## Current revision verification
+
+The opening and control changes address specific observed failures; they are not a claim that an automated agent can certify fun. The human player still decides whether the revised game feels enjoyable.
+
+- **Actual naive stage1:** launch with no pitch, brake or hint. Three physical passages show immediate feedback; first feedback arrives at5.5s. A visible landing assistant then finishes at28.78s. The control medal is attainable because the route includes a centred pass.
+- **Actual naive stage2:** one0.2s Left tap and release, following the wind coach, with no pitch, brake or hint. First physical passage feedback arrives at5.7s; finish at33.63s. All three passes can be graded perfect.
+- **Actual controls:** Up now climbs by5.76m over1s instead of dropping13m. Dragging upward and touch Up use the same convention. Releasing a short turn limits delayed yaw toabout2.6°. Visible manual override cancels the default landing help. A deliberate bad turn/dive yields a safe short landing and immediateR retry.
+- **Actual final transfer:** stage24 passes both physical openings with no hint or default lift overlay, records two perfect passes and finishes at94.23s through pointer controls plus the normal landing assistant. This is a technical route witness, not a novice-play claim.
+- **Touch:** actual touch Up climbs and release levels bank at390×844. The inspected narrow-screen capture keeps the sailplane wings visible and the goal/coach readable.
+- **All24 default-control feasibility:** every authored level now passes through the actual `arcadeInput` helper and normal landing-guidance inputs. None writes position, altitude, gate count or outcome. Each route must record its environmental decision before guidance. The earlier raw-simulator witnesses have been replaced for this acceptance check.
+- **53 meaningful tests:**15 rule checks,26 campaign/counterfactual/alternate-route checks and12 control/feedback checks. The latter verify prompt tutorial success, low-speed protection, no airtime farming, physical-plane passage detection, attainable perfect-versus-edge grading, reverse-side recovery and no environmental-decision credit from assisted approach.
+
+Passage grading was changed after visual inspection: entering a radius ahead of an arch no longer counts as crossing it. Swept crossings use the passage plane and its real width/height, so both success timing and perfect-pass feedback match the visible opening. A centred pass is required for the control medal, while optional landing help does not invalidate the earlier environmental decision. The runtime logs landing help separately from optional hints and slower-time assist.
+
+Current reproducible browser commands are `npx tsx tests/usability-revision.ts` and `npx tsx tests/browser-transfer.ts`, with the dev server at5301. Current raw reports and inspected screenshots are in `tests/captures/usability-v2/`; the lead copies selected deliverable evidence into `docs/captures/`. `tests/README.md` distinguishes these from the historical first-build harnesses.
+
+## Historical first-build review status
 
 - Curriculum source review: complete; full24 mapping in `CURRICULUM.md`.
 - Generated target and Tripo sequence: art helper supplied targets and original runtime GLB; actual browser state confirms `modelLoaded: true`. Provenance and costs are in `ASSETS.md`.

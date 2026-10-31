@@ -141,8 +141,9 @@ test('landing requires the meadow, every course gate and a controlled speed', ()
 });
 
 test('finish, control and environment medals remain independent of hint and assist', () => {
- const l=still();const s=start(l);s.mode='landed';s.decision=true;
+ const l=still();const s=start(l);s.mode='landed';s.decision=true;s.cleanPasses=1;
  assert.deepEqual(medals(s),{finish:true,control:true,environment:true});
+ s.cleanPasses=0;assert.deepEqual(medals(s),{finish:true,control:false,environment:true});s.cleanPasses=1;
  s.usedHint=true;assert.deepEqual(medals(s),{finish:true,control:true,environment:false});
  s.usedHint=false;s.assist=true;assert.equal(medals(s).environment,false);
  s.assist=false;s.controlPenalty=20;assert.deepEqual(medals(s),{finish:true,control:false,environment:true});
