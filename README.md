@@ -41,3 +41,7 @@ The visible original Tripo sailplane is2,316,952bytes with embedded textures. It
 For a built-preview offline/model/transfer check, run `npm run build`, `npm run preview`, then `node scripts/verify-static.mjs`. Browser QA uses Chromium Metal on macOS; software rendering is slower. Native OS focus-loss integration and student enjoyment/learning are not established by automated tests. No production deployment has been performed.
 
 Public repository: [AceDZN/windshift-riders](https://github.com/AceDZN/windshift-riders).
+
+## Focused pitch and landing update
+
+Down now requests a bounded glide angle and release eases back to trim. The visible nose follows the air-relative flight path. Braking deploys progressively and no longer fights a28m/s recovery target while trying to slow the glider. Assisted landing chooses a broad setup, tracks a wind-corrected final line, then flares with wings aligned; the meadow and its approach are actually level in the collision terrain. The stage HUD points at the active setup waypoint and the paint marks follow the chosen final direction. “סיום הנחיתה” can complete a long assisted approach by advancing the same physical flight to touchdown; it does not set a win or move the aircraft directly.

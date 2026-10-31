@@ -1,7 +1,8 @@
 import type {Level} from './levels';
 export type FlightMode='ready'|'flying'|'paused'|'landed'|'short';
 export type Input={bank:number;pitch:number;brake:boolean};
-export type FlightState={x:number;y:number;z:number;heading:number;bank:number;pitch:number;speed:number;vy:number;time:number;mode:FlightMode;gate:number;score:number;combo:number;usedHint:boolean;decision:boolean;controlPenalty:number;liftGain:number;liftTime:number;maxY:number;assist:boolean;message:string;trace:{x:number;y:number;z:number}[];bestDistance:number;gateFlash:number;rewardText:string;cleanPasses:number;nearPasses:number;landingPhase:'off'|'approach'|'flare';lastSkim:number};
+export type LandingPlan={entry:{x:number;y:number;z:number};touch:{x:number;y:number;z:number};heading:number;direct:boolean};
+export type FlightState={x:number;y:number;z:number;heading:number;bank:number;pitch:number;speed:number;vy:number;time:number;mode:FlightMode;gate:number;score:number;combo:number;usedHint:boolean;decision:boolean;controlPenalty:number;liftGain:number;liftTime:number;maxY:number;assist:boolean;message:string;trace:{x:number;y:number;z:number}[];bestDistance:number;gateFlash:number;rewardText:string;cleanPasses:number;nearPasses:number;landingPhase:'off'|'approach'|'flare';lastSkim:number;airVy:number;brake:number;landingLeg:'setup'|'final'|'flare';landingPlan?:LandingPlan;landingStartedAt:number};
 export const clamp=(n:number,min:number,max:number)=>Math.max(min,Math.min(max,n));
 export function coastX(z:number){return -365+45*Math.sin(z*.004)+25*Math.sin(z*.009);}
 export function terrainHeight(l:Level,x:number,z:number){
@@ -14,7 +15,7 @@ export function terrainHeight(l:Level,x:number,z:number){
  y+=480*Math.exp(-(((x-1500)/520)**2)-((z+2300)/650)**2);
  y+=280*Math.exp(-(((x-100)/360)**2)-((z+2500)/400)**2);
  // A flat landing meadow blends smoothly into the same terrain used by collision.
- const d=Math.hypot(x-l.landing.x,z-l.landing.z);const flatten=clamp(1-d/(l.landing.r+35),0,1);
+ const d=Math.hypot(x-l.landing.x,z-l.landing.z),blend=clamp((d-l.landing.r-95)/(l.landing.r*.75+100),0,1);const flatten=1-blend*blend*(3-2*blend);
  y=y*(1-flatten)+24*flatten;
  return y*inland;
 }
@@ -41,7 +42,7 @@ export function airAt(l:Level,x:number,y:number,z:number,time:number){
  const lift=clamp(thermal+ridge,-10,15)*clamp((agl+5)/20,0,1);
  return {lift,thermal,ridge,windX:w.x,windZ:w.z,sun,shadow,source};
 }
-export function createState(l:Level,assist=false):FlightState{return {...l.launch,bank:0,pitch:0,speed:28,vy:0,time:0,mode:'ready',gate:0,score:0,combo:1,usedHint:false,decision:false,controlPenalty:0,liftGain:0,liftTime:0,maxY:l.launch.y,assist,message:'',trace:[],bestDistance:Math.hypot(l.gates[0].x-l.launch.x,l.gates[0].z-l.launch.z),gateFlash:0,rewardText:'',cleanPasses:0,nearPasses:0,landingPhase:'off',lastSkim:-10};}
+export function createState(l:Level,assist=false):FlightState{return {...l.launch,bank:0,pitch:0,speed:28,vy:0,time:0,mode:'ready',gate:0,score:0,combo:1,usedHint:false,decision:false,controlPenalty:0,liftGain:0,liftTime:0,maxY:l.launch.y,assist,message:'',trace:[],bestDistance:Math.hypot(l.gates[0].x-l.launch.x,l.gates[0].z-l.launch.z),gateFlash:0,rewardText:'',cleanPasses:0,nearPasses:0,landingPhase:'off',lastSkim:-10,airVy:-1.2,brake:0,landingLeg:'setup',landingStartedAt:0};}
 export function step(s:FlightState,l:Level,input:Input,dt:number){
  if(s.mode!=='flying'||dt<=0)return;
  dt=Math.min(dt,.05); s.time+=dt;s.gateFlash=Math.max(0,s.gateFlash-dt*.9);
@@ -51,16 +52,23 @@ export function step(s:FlightState,l:Level,input:Input,dt:number){
  s.heading+=Math.tan(s.bank)*.8*dt;
  const a=airAt(l,s.x,s.y,s.z,s.time);
  const oldSpeed=s.speed;
- // Only deliberate pitch exchanges kinetic energy for height. Drag dissipates energy.
- const pitchedSpeed=clamp(oldSpeed-s.pitch*5.5*dt,13,48);
- let speedTrade=-(pitchedSpeed*pitchedSpeed-oldSpeed*oldSpeed)/(2*9.81*dt);
- const regulation=(28-pitchedSpeed)*.18;
- const regulatedSpeed=clamp(pitchedSpeed+Math.max(0,regulation)*dt,13,48);
- speedTrade-=Math.max(0,regulatedSpeed*regulatedSpeed-pitchedSpeed*pitchedSpeed)/(2*9.81*dt);
- s.speed=clamp(regulatedSpeed+(Math.min(0,regulation)-(input.brake?8:0))*dt,13,48);
+ // Brakes deploy progressively. The trim speed follows them instead of fighting them.
+ s.brake+=((input.brake?1:0)-s.brake)*(1-Math.exp(-dt*3));
  const bankLoss=1.2*Math.abs(s.bank)**2;
- const sink=1.2+bankLoss+(s.speed<18?(18-s.speed)*.5:0)+(input.brake?5.5:0);
- s.vy=a.lift-sink+speedTrade;
+ const sink=1.2+bankLoss+(oldSpeed<18?(18-oldSpeed)*.5:0);
+ const brakeSink=s.brake*1.8;
+ const trimSpeed=28-8*s.brake;
+ const recoveryCost=Math.max(0,(trimSpeed-oldSpeed)*.18)*oldSpeed/9.81;
+ const desiredAirVy=s.pitch*oldSpeed*5.5/9.81-sink-brakeSink-recoveryCost;
+ // Bound control-induced vertical acceleration; moving air remains an independent field.
+ s.airVy+=clamp(desiredAirVy-s.airVy,-6*dt,6*dt);
+ const surplusDrag=Math.max(0,oldSpeed-trimSpeed)*(.18+.42*s.brake)*oldSpeed/9.81;
+ const dissipatedHeight=sink+brakeSink+surplusDrag;
+ const available=(oldSpeed*oldSpeed-13*13)/(2*9.81*dt)-dissipatedHeight;
+ s.airVy=Math.min(s.airVy,available);
+ // Exactly pay potential energy from airspeed, or gain speed from descending.
+ s.speed=clamp(Math.sqrt(Math.max(13*13,oldSpeed*oldSpeed-2*9.81*dt*(s.airVy+dissipatedHeight))),13,48);
+ s.vy=a.lift+s.airVy;
  const oldX=s.x,oldZ=s.z;
  s.y+=s.vy*dt;
  s.x+=(Math.sin(s.heading)*s.speed+a.windX)*dt;
@@ -98,6 +106,6 @@ export function step(s:FlightState,l:Level,input:Input,dt:number){
   if(s.gate===l.gates.length&&landingDistance<l.landing.r&&s.speed<=31){s.mode='landed';s.score+=Math.max(0,Math.round((l.par-s.time)*12))+1200;s.message='נחיתה נהדרת';}
   else{s.mode='short';s.message=s.speed>31?'הגישה הייתה מהירה מדי':'נחתתם לפני היעד';}
  }
- if(s.y<2||Math.abs(s.x)>1600||s.z< -2200||s.z>1000||s.time>240){s.mode='short';s.message='יצאתם מטווח המסלול';}
+ if(s.y<2||Math.abs(s.x)>1600||s.z< -2200||s.z>1000||s.time>(s.landingPhase==='off'?240:Math.max(240,s.landingStartedAt+180))){s.mode='short';s.message='יצאתם מטווח המסלול';}
 }
 export function medals(s:FlightState){return {finish:s.mode==='landed',control:s.mode==='landed'&&s.controlPenalty<8&&s.cleanPasses>0,environment:s.mode==='landed'&&s.decision&&!s.usedHint&&!s.assist};}

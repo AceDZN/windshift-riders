@@ -2,6 +2,32 @@
 
 31 October 2026. Tests and outcomes are recorded here as they run. A planned check is not a passed check. Browser captures must use actual flight controls; no injected finish states count as gameplay evidence. Pure simulation route controllers may set the initial mode to flying and then supply only valid bank/pitch/brake input.
 
+## Current flight-feel revision verification
+
+The human player found nose-down control and landing unnatural after the accessibility revision. The previous 53 checks established reachable outcomes and visible goals, but did not constrain vertical acceleration, agreement between the flight path and rendered nose, or touchdown quality. The focused revision adds six checks and actual browser traces for those failures. It still requires human play to judge enjoyment.
+
+The baseline exposed concrete problems: held Down reached about −19.1° after one second while the model nose showed only −3.44°; release produced about 63 m/s² vertical acceleration. Braking changed sink by 5.5 m/s in one frame, producing about 330–342 m/s². Default approaches for stages 1, 3 and 19 finished at about −12.84 m/s vertical speed and 13 m/s airspeed. Stage 19 included about 340° of continuous same-direction turning. A successful outcome concealed a steep, banked fall. Baseline 10 Hz traces remain in `tests/captures/flight-feel-baseline/`.
+
+The revised controls request a bounded air-relative glide angle, smooth the vertical response and brake, and conserve energy through actual height/speed exchange and drag. The normal landing helper flies a prepared setup, final and flare through bank/pitch/brake inputs. `beginLanding` changes metadata only; no position, altitude or outcome is interpolated. Predictions use local physics clones, then the real aircraft flies every accepted step. Scene pitch follows the air-relative flight path and settles level on the ground.
+
+- **59/59 model checks pass:** 15 rule checks, 26 campaign/counterfactual/alternate-route checks, 12 control/feedback checks and six focused feel checks. All 24 authored courses finish using standard `arcadeInput` controls and the normal landing helper. Every route records its environmental decision before assistance; assistance cannot manufacture that credit. Energy, sun, moisture, shadow, ridge reversal and no-lift counterfactuals still pass.
+- **Actual native-frame controls pass:** keyboard Down settles near −12°, with rendered-nose error below 2° during the response. Down, release and brake sampling observed a peak vertical acceleration of 6.36 m/s². The pure tests independently bound the response and check longer held input. The browser begins with real keyboard events and normal animation frames; deterministic advancement is used for the longer routes.
+- **Actual course-to-touchdown browser checks pass:** stages 1, 3 and 19 use pointer flight controls, pass every physical opening and then use the visible default landing helper. There are no flight-state or finish injections, console errors or page errors. Setup, final, flare and result screenshots were captured; the held-Down, stage-1 flare and stage-19 result views were independently inspected.
+
+| Stage | Finish game time | Assisted approach | Touchdown vertical speed | Touchdown airspeed | Maximum continuous same-direction turn |
+|---|---:|---:|---:|---:|---:|
+| 1 | 41.62 s | 22.62 s | −1.84 m/s | 21.67 m/s | 155.0° |
+| 3 | 74.20 s | 43.40 s | −1.84 m/s | 21.67 m/s | 149.9° |
+| 19 | 160.57 s | 87.77 s | −1.91 m/s | 20.67 m/s | 194.6° |
+
+Minimum airspeed during these approaches stays above 20.1 m/s; touchdown bank is below 0.8°. Ground-track error relative to the planned final is 19.1°, 2.2° and 0.1° respectively, within the 25° acceptance bound. Stage 19 turns 317.6° in total through opposite-direction setup/final turns, which is distinct from one continuous holding spiral. These bounds are game-feel regression limits, not real aviation operating guidance.
+
+The explicit **finish landing** button also passes a separate actual-browser comparison. The watched and accelerated stage-1 approaches reach identical physical position, 41.62 s game time, −1.84 m/s touchdown speed and score 4387. The button advances ordinary fixed steps until contact; it does not inject a win. `landingSkipped` differs and persists in the first-run record. This option avoids requiring the player to watch a long late-stage approach.
+
+Planning latency remains a limit: the all-24 pure probe measured a 365 ms median and 1.716 s maximum on this Mac; stages 3, 18 and 21 exceeded one second. Sampled actual-browser activation calls for stages 1/3/19 took 29/74/68 ms including advancement/render overhead. The route-dependent worst case can still cause a visible pause and should not be described as universally below one frame or one second.
+
+Reproduce with `npm test`, `npx tsx tests/probe-default-routes.ts`, `npx tsx tests/browser-flight-feel.ts` and `npx tsx tests/browser-landing-skip.ts` against the dev server at 5301. Current raw reports are `tests/captures/flight-feel-final/default-routes.jsonl`, `tests/captures/flight-feel-browser/report.json` and `tests/captures/flight-feel-browser/quick-finish-report.json`. The final suite transcript is `tests/captures/flight-feel-revision/final-suite-4.txt`. Selected copies of these current reports, native Down/release views, stage-3 flare/result views and both quick-finish result views are saved in `docs/captures/flight-feel/`. Earlier sections below are historical evidence for their stated revisions, not current timing claims.
+
 ## Usability reopened after human playtest
 
 The human player reported that the first build felt confusing, boring and too hard. The prior route-controller tests established mathematical feasibility, not intuitive controls or fun. That distinction was not tested sufficiently in the first acceptance pass. The earlier results below remain historical technical evidence and do not establish usability of the revised game.
@@ -15,7 +41,7 @@ An independent naive-input browser pass against the stable first build used no n
 
 Baseline script: `tests/usability-baseline.ts`. Raw report and inspected screenshots: `tests/captures/usability-v1/` (local QA artifacts). The revision was checked separately for naive first1/2 controls without optional hints, readable progressive goals, immediate feedback, forgiving failure/retry, meaningful field invariants and a final-stage transfer route; current outcomes follow below. Old autopilot witnesses will not be used as proof that the revision is intuitive or enjoyable. No claim of student usability or learning gains is justified without people testing it.
 
-## Current revision verification
+## Previous accessibility revision verification
 
 The opening and control changes address specific observed failures; they are not a claim that an automated agent can certify fun. The human player still decides whether the revised game feels enjoyable.
 

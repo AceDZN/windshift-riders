@@ -3,7 +3,7 @@
 Original commission: fun-first Hebrew browser 3D geography flight for grades 8–9; 24 authored levels. This is an arcade interpretation of local weather, not flight training or a weather forecast.
 
 ## Play
-The opening launches directly toward three generous gold-and-cream fabric passages above a headland. Left/right taps are sufficient in the first course; a first visible crossing arrives after about five seconds. Passing the actual arch plane produces a chime, gold flecks and a clear perfect/edge reward. The next objective becomes prominent immediately. After the three passages, visible landing assistance steers and brakes using the same flight controls, reaching a physical meadow landing; a manual override is available. The first two flights take roughly half a minute, with no unexplained precision landing orbit.
+The opening launches directly toward three generous gold-and-cream fabric passages above a headland. Left/right taps are sufficient in the first course; a first visible crossing arrives after about five seconds. Passing the actual arch plane produces a chime, gold flecks and a clear perfect/edge reward. The next objective becomes prominent immediately. After the three passages, visible landing assistance steers and brakes using the same flight controls, reaching a physical meadow landing; a manual override is available. The first two flights take around forty seconds with a gentle assisted approach, and the player can complete that assistance quickly. There is no tight braking spiral or unexplained precision landing requirement.
 
 Later courses require climbing in useful rising air, choosing windward slopes and anticipating changes. The three medals remain completion, course control and a physical environment decision without hints/slow assist. Environmental evidence is collected before automatic approach, never created by it. Replay any course for cleaner passages, proximity bonuses and a faster score. Only new best progress toward the current passage earns distance points; circling does not farm airborne-time score.
 
@@ -26,3 +26,7 @@ Identity precedes two built-in imagegen design targets, their inspection, then a
 
 ## Actual player feedback revision
 The first release passed technical feasibility checks but the human found it confusing, strange, boring and too hard. That feedback triggered the controller, opening, reward, landing and scene redesign above. Automated route witnesses remain feasibility evidence; no test suite or screenshot establishes human enjoyment. New browser checks use simple opening inputs rather than a numerical pilot to establish basic accessibility.
+
+
+## Pitch and landing feel correction
+A second human playtest still found the nose dive and landing strange. Manual descent now targets a bounded air-relative glide angle; vertical response and airbrake deployment ease progressively. The rendered nose follows that actual air-relative path, while thermal motion remains separate. Landing uses a broad wind-aware setup and final, a genuinely prepared flat meadow and a low-sink flare, with a physical energy reserve. Approach metadata is explicit, persists beyond the initial activation radius, and can be overridden or completed quickly through the same simulation. Technical reachability alone remains insufficient evidence of comfortable human control.

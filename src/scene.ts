@@ -9,6 +9,7 @@ const mix=(a:number,b:number,t:number)=>a+(b-a)*t;
 export type SceneFeedback={gateFlash?:number;landingApproach?:boolean};
 export class FlightScene{
  renderer:T.WebGLRenderer;scene=new T.Scene();camera=new T.PerspectiveCamera(58,1,.5,7000);world=new T.Group();plane=new T.Group();sun=new T.DirectionalLight('#fff1cc',2.5);hemi=new T.HemisphereLight('#d7edfa','#9d7950',2);clouds:T.Group[]=[];flags:T.Group[]=[];hints=new T.Group();trail:T.Line;ghost:T.Line;modelLoaded=false;modelError='';reduced=false;level!:Level;fps=60;frames=0;sample=performance.now();
+ presentation={pitchRadians:0,bankRadians:0,cameraLeadMetres:0};
  private sky?:T.Mesh;private sea?:T.Mesh;private lastGate=0;private burst=new T.Group();private burstAt=-10;private landing=new T.Group();private flightClock=0;
  constructor(public canvas:HTMLCanvasElement){
   this.renderer=new T.WebGLRenderer({canvas,antialias:true,powerPreference:'high-performance',preserveDrawingBuffer:true});
@@ -31,7 +32,7 @@ export class FlightScene{
  buildFallback(){const fus=this.mesh(new T.SphereGeometry(1,12,8),'#f3e4be');fus.scale.set(.65,.7,5);this.plane.add(fus);this.plane.add(this.mesh(new T.BoxGeometry(18,.2,1.5),'#6aabb1',0,.15,0),this.mesh(new T.BoxGeometry(5,.16,1),'#f1e4c3',0,.65,3.8),this.mesh(new T.BoxGeometry(.18,1.6,1.5),'#d19b45',0,1,3.6));}
  private clearWorld(){this.world.traverse(o=>{if(o instanceof T.Mesh||o instanceof T.Line||o instanceof T.Points){o.geometry.dispose();for(const m of Array.isArray(o.material)?o.material:[o.material])m.dispose();}});this.world.clear();this.flags=[];this.clouds=[];this.hints=new T.Group();this.landing=new T.Group();}
  setLevel(l:Level){
-  this.level=l;this.clearWorld();this.lastGate=0;this.burstAt=-10;this.flightClock=0;this.burst.children.forEach(c=>c.visible=false);
+  this.level=l;this.clearWorld();this.lastGate=0;this.burstAt=-10;this.flightClock=0;this.presentation.pitchRadians=0;this.presentation.bankRadians=0;this.presentation.cameraLeadMetres=0;this.burst.children.forEach(c=>c.visible=false);
   const night=!!l.night;this.scene.background=new T.Color(night?'#324e6b':l.sunset?'#eac3a1':'#b9e1e7');this.scene.fog=new T.Fog(night?'#4c6980':l.sunset?'#e6c3a6':'#c5dbd8',1050,4300);
   this.sun.color.set(night?'#c8deec':'#fff0d1');this.sun.intensity=night?1.05:2.5;this.hemi.color.set(night?'#9eb8d0':'#d0ecf5');this.hemi.groundColor.set(night?'#666b60':'#a68a5a');this.hemi.intensity=night?1.45:1.65;
   this.addSky(l);this.addTerrain(l);this.addSea(l);this.addVegetation(l);this.addFields(l);this.addVillage(l);this.addGates(l);this.addLanding(l);this.addClouds(l);this.addLiftCues(l);
@@ -107,7 +108,7 @@ export class FlightScene{
   const p=l.landing,r=p.r;
   const meadow=new T.CircleGeometry(r,64);meadow.rotateX(-Math.PI/2);const a=meadow.attributes.position;for(let i=0;i<a.count;i++){const x=a.getX(i)+p.x,z=a.getZ(i)+p.z;a.setXYZ(i,x,terrainHeight(l,x,z)+.6,z);}meadow.computeVertexNormals();const meadowMesh=new T.Mesh(meadow,this.mat(l.night?'#7b9d8e':'#91b177'));meadowMesh.name='landing-meadow';this.landing.add(meadowMesh);
   const border:number[]=[];for(let i=0;i<64;i++){const a=i*Math.PI*2/64,b=a+.06;const x=p.x+Math.cos(a)*r,z=p.z+Math.sin(a)*r,x2=p.x+Math.cos(b)*r,z2=p.z+Math.sin(b)*r;border.push(x,terrainHeight(l,x,z)+1,z,x2,terrainHeight(l,x2,z2)+1,z2);}this.landing.add(new T.LineSegments(new T.BufferGeometry().setAttribute('position',new T.Float32BufferAttribute(border,3)),new T.LineBasicMaterial({color:'#f6e9bf',transparent:true,opacity:.45})));
-  for(let i=-2;i<=2;i++){const z=p.z+i*r*.25;const chevron=new T.Shape();chevron.moveTo(-15,0);chevron.lineTo(0,8);chevron.lineTo(15,0);chevron.lineTo(15,-4);chevron.lineTo(0,4);chevron.lineTo(-15,-4);chevron.closePath();const geometry=new T.ShapeGeometry(chevron);geometry.rotateX(-Math.PI/2);const c=new T.Mesh(geometry,new T.MeshBasicMaterial({color:'#f5e9c8',side:T.DoubleSide,transparent:true,opacity:.35}));const previous=l.gates.at(-1)||l.launch;c.rotation.y=Math.atan2(previous.x-p.x,previous.z-p.z);c.position.set(p.x,terrainHeight(l,p.x,z)+1.1,z);this.landing.add(c);}
+  for(let i=-2;i<=2;i++){const z=p.z+i*r*.25;const chevron=new T.Shape();chevron.moveTo(-15,0);chevron.lineTo(0,8);chevron.lineTo(15,0);chevron.lineTo(15,-4);chevron.lineTo(0,4);chevron.lineTo(-15,-4);chevron.closePath();const geometry=new T.ShapeGeometry(chevron);geometry.rotateX(-Math.PI/2);const c=new T.Mesh(geometry,new T.MeshBasicMaterial({color:'#f5e9c8',side:T.DoubleSide,transparent:true,opacity:.35}));c.name='landing-chevron';const previous=l.gates.at(-1)||l.launch;c.rotation.y=Math.atan2(previous.x-p.x,previous.z-p.z);c.position.set(p.x,terrainHeight(l,p.x,z)+1.1,z);this.landing.add(c);}
   for(const dx of [-r*.8,r*.8]){const y=terrainHeight(l,p.x+dx,p.z);this.landing.add(this.mesh(new T.CylinderGeometry(.7,.7,22,5),'#eee1bc',p.x+dx,y+11,p.z));const sock=this.mesh(new T.ConeGeometry(3.2,15,8),'#e6a061',p.x+dx+6,y+21,p.z);sock.name='windsock';sock.userData={originX:p.x+dx,originZ:p.z,baseY:y+21};this.landing.add(sock);}
   this.world.add(this.landing);
  }
@@ -121,16 +122,31 @@ export class FlightScene{
  setGhost(trace:{x:number;y:number;z:number}[]){this.ghost.geometry.dispose();this.ghost.geometry=new T.BufferGeometry().setFromPoints(trace.map(p=>new T.Vector3(p.x,p.y,p.z)));this.ghost.computeLineDistances();this.ghost.visible=trace.length>2;}
  resize(){const w=this.canvas.clientWidth,h=this.canvas.clientHeight;this.renderer.setSize(w,h,false);this.camera.aspect=w/h;this.camera.updateProjectionMatrix();}
  draw(s:FlightState,dt:number,hint:boolean,feedback?:SceneFeedback){
-  const l=this.level;this.flightClock=s.time;this.plane.position.set(s.x,s.y,s.z);this.plane.rotation.set(s.pitch*.11,-s.heading,-s.bank*.82,'YXZ');
+  const l=this.level;this.flightClock=s.time;const air=airAt(l,s.x,s.y,s.z,s.time);
+  const flight=s as FlightState&{airVy?:number};
+  const resting=s.mode==='ready'||s.mode==='landed'||s.mode==='short';
+  const airVy=Number.isFinite(flight.airVy)?flight.airVy!:s.vy-air.lift;
+  const pitchTarget=resting?0:T.MathUtils.clamp(Math.atan2(airVy,Math.max(13,s.speed)),-14*Math.PI/180,12*Math.PI/180);
+  const bankTarget=resting?0:-s.bank*.82;
+  const leadTarget=resting?0:T.MathUtils.clamp(s.vy*.35,-4,3);
+  // Manual time stepping draws with dt=0: present the current trajectory deterministically.
+  // Pausing preserves the last visible attitude; a landed glider settles level.
+  if(s.mode!=='paused'){
+   const blend=(seconds:number)=>dt<=0?1:1-Math.exp(-Math.min(dt,.05)/seconds);
+   this.presentation.pitchRadians=T.MathUtils.lerp(this.presentation.pitchRadians,pitchTarget,blend(.18));
+   this.presentation.bankRadians=T.MathUtils.lerp(this.presentation.bankRadians,bankTarget,blend(.12));
+   this.presentation.cameraLeadMetres=T.MathUtils.lerp(this.presentation.cameraLeadMetres,leadTarget,blend(.25));
+  }
+  this.plane.position.set(s.x,s.y,s.z);this.plane.rotation.set(this.presentation.pitchRadians,-s.heading,this.presentation.bankRadians,'YXZ');
   // Heading follows the flight model directly. No side-slip camera lag or banking horizon.
-  const setback=33*Math.max(1,.9/this.camera.aspect),behind=new T.Vector3(-Math.sin(s.heading)*setback,12*Math.min(1.6,setback/33),Math.cos(s.heading)*setback);this.camera.position.set(s.x,s.y,s.z).add(behind);this.camera.up.set(0,1,0);this.camera.lookAt(s.x+Math.sin(s.heading)*95,s.y-5,s.z-Math.cos(s.heading)*95);
+  const setback=33*Math.max(1,.9/this.camera.aspect),behind=new T.Vector3(-Math.sin(s.heading)*setback,12*Math.min(1.6,setback/33),Math.cos(s.heading)*setback);this.camera.position.set(s.x,s.y,s.z).add(behind);this.camera.up.set(0,1,0);this.camera.lookAt(s.x+Math.sin(s.heading)*95,s.y-5+this.presentation.cameraLeadMetres,s.z-Math.cos(s.heading)*95);
   const desiredFov=this.reduced?58:58+T.MathUtils.clamp((s.speed-28)*.12,-1,3);if(Math.abs(this.camera.fov-desiredFov)>.05){this.camera.fov=desiredFov;this.camera.updateProjectionMatrix();}if(this.sky)this.sky.position.copy(this.camera.position);
-  const air=airAt(l,s.x,s.y,s.z,s.time);if(this.sea){const m=this.sea.material as T.ShaderMaterial;m.uniforms.time.value=s.time;}
+  if(this.sea){const m=this.sea.material as T.ShaderMaterial;m.uniforms.time.value=s.time;}
   this.flags.forEach((g,i)=>{g.visible=i>=s.gate&&i<=s.gate+1;const active=i===s.gate,pulse=active&&!this.reduced?1+Math.sin(s.time*2.6)*.012:1;g.scale.setScalar(pulse);for(const child of g.children){if(child.name==='gate-ribbon'){const m=(child as T.Mesh).material as T.MeshStandardMaterial;m.emissiveIntensity=active?.2+Math.sin(s.time*2)*.06:0;m.color.set(active?'#ffd27a':'#cbbf9d');m.opacity=active?1:.35;}if(child.name.startsWith('gate-cloth')){const m=child as T.Mesh;const pos=m.geometry.attributes.position;for(let k=0;k<pos.count;k++)pos.setZ(k,Math.sin(pos.getY(k)*.21+s.time*2.5+child.userData.phase)*(this.reduced?.2:1.5));pos.needsUpdate=true;}}});
   if(s.gate>this.lastGate&&this.flags[this.lastGate]){this.burst.position.copy(this.flags[this.lastGate].position);this.burstAt=s.time;}this.lastGate=s.gate;const elapsed=s.time-this.burstAt;this.burst.children.forEach((c,i)=>{c.visible=elapsed>=0&&elapsed<1.8&&!this.reduced;if(c.visible){const a=i*2.4;c.position.set(Math.cos(a)*(8+elapsed*22),Math.sin(a)*(8+elapsed*22)-elapsed*5,Math.sin(i*1.7)*elapsed*14);c.rotation.set(elapsed*2+i,elapsed+i,elapsed*3);((c as T.Mesh).material as T.MeshBasicMaterial).opacity=Math.max(0,1-elapsed/1.8);}});
   const cloud=this.world.getObjectByName('cloud-field');if(cloud){cloud.position.x=air.windX*s.time*.26;cloud.position.z=air.windZ*s.time*.26;}
   this.landing.traverse(sock=>{if(sock.name==='windsock'){const direction=new T.Vector3(air.windX,0,air.windZ).normalize();if(direction.lengthSq()>.1){sock.quaternion.setFromUnitVectors(new T.Vector3(0,1,0),direction);sock.position.set(sock.userData.originX+direction.x*6,sock.userData.baseY,sock.userData.originZ+direction.z*6);}}});
-  const presentation=s as FlightState&{landingPhase?:'off'|'approach'|'flare';gateFlash?:number};const landingActive=s.gate>=l.gates.length||feedback?.landingApproach||presentation.landingPhase==='approach'||presentation.landingPhase==='flare';this.landing.scale.setScalar(1);this.landing.children.forEach(c=>{if(c instanceof T.Mesh&&c.material instanceof T.MeshBasicMaterial){c.material.color.set(landingActive?'#fff2c3':'#e6dfbf');c.material.opacity=landingActive?.95:.3;}if(c instanceof T.Mesh&&c.name==='landing-meadow')(c.material as T.MeshStandardMaterial).color.set(landingActive?(l.night?'#8aab99':'#9ab778'):(l.night?'#617d73':'#859764'));if(c instanceof T.LineSegments)(c.material as T.LineBasicMaterial).opacity=landingActive?1:.45;});
+  const presentation=s as FlightState&{landingPhase?:'off'|'approach'|'flare';gateFlash?:number};const landingActive=s.gate>=l.gates.length||feedback?.landingApproach||presentation.landingPhase==='approach'||presentation.landingPhase==='flare';this.landing.scale.setScalar(1);this.landing.children.forEach(c=>{if(c.name==='landing-chevron'&&s.landingPlan)c.rotation.y=-s.landingPlan.heading;if(c instanceof T.Mesh&&c.material instanceof T.MeshBasicMaterial){c.material.color.set(landingActive?'#fff2c3':'#e6dfbf');c.material.opacity=landingActive?.95:.3;}if(c instanceof T.Mesh&&c.name==='landing-meadow')(c.material as T.MeshStandardMaterial).color.set(landingActive?(l.night?'#8aab99':'#9ab778'):(l.night?'#617d73':'#859764'));if(c instanceof T.LineSegments)(c.material as T.LineBasicMaterial).opacity=landingActive?1:.45;});
   for(const group of this.hints.children){const p=group.userData.patch as Patch,lift=airAt(l,p.x,100,p.z,s.time).thermal;group.visible=lift>1&&(l.overlay||hint);for(const [i,leaf]of group.children.entries()){const a=i*2.4+s.time*.45,y=((i*9+s.time*11)%220)+terrainHeight(l,p.x,p.z);leaf.position.set(Math.cos(a)*(24+i%6*7),y,Math.sin(a)*(24+i%6*7));leaf.rotation.set(a,0,a*.4);}}
   const shadow=this.world.getObjectByName('shadow');if(shadow&&l.shadow){shadow.position.x=l.shadow.x+l.shadow.speed*s.time;shadow.position.y=terrainHeight(l,shadow.position.x,shadow.position.z)+1;}
   if(s.trace.length>1){this.trail.geometry.dispose();this.trail.geometry=new T.BufferGeometry().setFromPoints(s.trace.slice(-50).map(p=>new T.Vector3(p.x,p.y,p.z)));}

@@ -1,0 +1,301 @@
+{
+  "method": "Compare actual quick-finish button with the same watched fixed-step approach from the same launch. No flight-state injection.",
+  "errors": [],
+  "skipped": {
+    "mode": "landed",
+    "level": 1,
+    "name": "כנפיים ראשונות",
+    "coordinates": "x east, y altitude metres, z south; heading0 north (-z)",
+    "player": {
+      "x": -9.66,
+      "y": 28,
+      "z": -633.51,
+      "heading": -1.389,
+      "bank": -0.013,
+      "pitch": 0.154,
+      "speed": 21.67,
+      "verticalSpeed": -1.84
+    },
+    "time": 41.62,
+    "gate": 3,
+    "gates": [
+      {
+        "x": -35,
+        "y": 115,
+        "z": 40,
+        "r": 65
+      },
+      {
+        "x": 55,
+        "y": 105,
+        "z": -150,
+        "r": 75
+      },
+      {
+        "x": 0,
+        "y": 90,
+        "z": -345,
+        "r": 80
+      }
+    ],
+    "landing": {
+      "x": 0,
+      "z": -590,
+      "r": 100
+    },
+    "objective": "הטיסה הושלמה — בדרך לנחיתה",
+    "controls": "Arrow/W up=climb; Arrow/S down=dive; Left/A Right/D=gentle turn; drag upward=climb; release=level wings",
+    "selectedTool": "glider",
+    "input": {
+      "bank": 0,
+      "pitch": 0,
+      "brake": false
+    },
+    "landingMode": "flare",
+    "landingLeg": "flare",
+    "landingPlan": {
+      "entry": {
+        "x": 225.16660498395407,
+        "y": 54.319067822330496,
+        "z": -460.00000000000006
+      },
+      "touch": {
+        "x": 0,
+        "y": 28,
+        "z": -590
+      },
+      "heading": -1.047197551196598,
+      "direct": false
+    },
+    "airPathAngle": -0.08470563089376743,
+    "presentation": {
+      "pitchRadians": 0,
+      "bankRadians": 0,
+      "cameraLeadMetres": 0
+    },
+    "autoLandingEnabled": true,
+    "landingHelpUsed": true,
+    "landingSkipped": true,
+    "air": {
+      "lift": 6.948706539693119e-19,
+      "thermal": 1.5441570088206931e-18,
+      "ridge": 0,
+      "windX": 1,
+      "windZ": 0,
+      "sun": 1,
+      "shadow": 0,
+      "source": "קרקע יבשה · שמש ישירה"
+    },
+    "ground": 24,
+    "patches": [
+      {
+        "x": 280,
+        "z": -200,
+        "moisture": 0.08,
+        "sun": 1,
+        "label": "קרקע יבשה · שמש ישירה"
+      }
+    ],
+    "overlay": true,
+    "usedHint": false,
+    "assist": false,
+    "score": 4387,
+    "combo": 4,
+    "cleanPasses": 1,
+    "reward": "מעבר מושלם! +1,000",
+    "medals": {
+      "finish": true,
+      "control": true,
+      "environment": true
+    },
+    "modelLoaded": true,
+    "modelError": "",
+    "fps": 9,
+    "progress": {
+      "1": {
+        "score": 4387,
+        "medals": {
+          "finish": true,
+          "control": true,
+          "environment": true
+        },
+        "attempts": 1,
+        "starts": 1,
+        "retries": 0,
+        "hintedRuns": 0,
+        "assistedRuns": 0,
+        "lastRuns": [
+          {
+            "outcome": "landed",
+            "hinted": false,
+            "assisted": false,
+            "decision": true,
+            "gates": 3,
+            "seconds": 41.6,
+            "landingHelp": true,
+            "landingSkipped": true
+          }
+        ],
+        "firstRun": {
+          "outcome": "landed",
+          "hinted": false,
+          "assisted": false,
+          "decision": true,
+          "gates": 3,
+          "seconds": 41.6,
+          "landingHelp": true,
+          "landingSkipped": true
+        }
+      }
+    }
+  },
+  "watched": {
+    "mode": "landed",
+    "level": 1,
+    "name": "כנפיים ראשונות",
+    "coordinates": "x east, y altitude metres, z south; heading0 north (-z)",
+    "player": {
+      "x": -9.66,
+      "y": 28,
+      "z": -633.51,
+      "heading": -1.389,
+      "bank": -0.013,
+      "pitch": 0.154,
+      "speed": 21.67,
+      "verticalSpeed": -1.84
+    },
+    "time": 41.62,
+    "gate": 3,
+    "gates": [
+      {
+        "x": -35,
+        "y": 115,
+        "z": 40,
+        "r": 65
+      },
+      {
+        "x": 55,
+        "y": 105,
+        "z": -150,
+        "r": 75
+      },
+      {
+        "x": 0,
+        "y": 90,
+        "z": -345,
+        "r": 80
+      }
+    ],
+    "landing": {
+      "x": 0,
+      "z": -590,
+      "r": 100
+    },
+    "objective": "הטיסה הושלמה — בדרך לנחיתה",
+    "controls": "Arrow/W up=climb; Arrow/S down=dive; Left/A Right/D=gentle turn; drag upward=climb; release=level wings",
+    "selectedTool": "glider",
+    "input": {
+      "bank": 0,
+      "pitch": 0,
+      "brake": false
+    },
+    "landingMode": "flare",
+    "landingLeg": "flare",
+    "landingPlan": {
+      "entry": {
+        "x": 225.16660498395407,
+        "y": 54.319067822330496,
+        "z": -460.00000000000006
+      },
+      "touch": {
+        "x": 0,
+        "y": 28,
+        "z": -590
+      },
+      "heading": -1.047197551196598,
+      "direct": false
+    },
+    "airPathAngle": -0.08470563089376743,
+    "presentation": {
+      "pitchRadians": 0,
+      "bankRadians": 0,
+      "cameraLeadMetres": 0
+    },
+    "autoLandingEnabled": true,
+    "landingHelpUsed": true,
+    "landingSkipped": false,
+    "air": {
+      "lift": 6.948706539688973e-19,
+      "thermal": 1.5441570088197716e-18,
+      "ridge": 0,
+      "windX": 1,
+      "windZ": 0,
+      "sun": 1,
+      "shadow": 0,
+      "source": "קרקע יבשה · שמש ישירה"
+    },
+    "ground": 24,
+    "patches": [
+      {
+        "x": 280,
+        "z": -200,
+        "moisture": 0.08,
+        "sun": 1,
+        "label": "קרקע יבשה · שמש ישירה"
+      }
+    ],
+    "overlay": true,
+    "usedHint": false,
+    "assist": false,
+    "score": 4387,
+    "combo": 4,
+    "cleanPasses": 1,
+    "reward": "מעבר מושלם! +1,000",
+    "medals": {
+      "finish": true,
+      "control": true,
+      "environment": true
+    },
+    "modelLoaded": true,
+    "modelError": "",
+    "fps": 37,
+    "progress": {
+      "1": {
+        "score": 4387,
+        "medals": {
+          "finish": true,
+          "control": true,
+          "environment": true
+        },
+        "attempts": 1,
+        "starts": 1,
+        "retries": 0,
+        "hintedRuns": 0,
+        "assistedRuns": 0,
+        "lastRuns": [
+          {
+            "outcome": "landed",
+            "hinted": false,
+            "assisted": false,
+            "decision": true,
+            "gates": 3,
+            "seconds": 41.6,
+            "landingHelp": true,
+            "landingSkipped": false
+          }
+        ],
+        "firstRun": {
+          "outcome": "landed",
+          "hinted": false,
+          "assisted": false,
+          "decision": true,
+          "gates": 3,
+          "seconds": 41.6,
+          "landingHelp": true,
+          "landingSkipped": false
+        }
+      }
+    }
+  },
+  "complete": true
+}
