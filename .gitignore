@@ -10,3 +10,6 @@ test-results/
 playwright-report/
 *.log
 tmp/
+work/
+output/
+tests/captures/

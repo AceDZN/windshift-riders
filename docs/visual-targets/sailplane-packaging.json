@@ -1,0 +1,27 @@
+{
+  "path": "public/models/sailplane.glb",
+  "bytes": 2316952,
+  "sha256": "463c162885f675fe06725c81f5901978cfbe8f2ea48edb7eebf90720222f10d2",
+  "generator": "Tripo",
+  "meshes": 1,
+  "nodes": 1,
+  "skins": 0,
+  "animations": 0,
+  "images": 3,
+  "externalUris": [],
+  "positionBounds": [
+    {
+      "min": [
+        -0.297271728515625,
+        0.0,
+        -0.5
+      ],
+      "max": [
+        0.297271728515625,
+        0.1714019775390625,
+        0.5
+      ],
+      "vertices": 11848
+    }
+  ]
+}
