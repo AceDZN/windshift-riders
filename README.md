@@ -29,10 +29,14 @@ The visible sailplane is an original Tripo GLB acquired through the human's Chro
 
 ## Verification and evidence
 
-`npm test` runs pure flight rules and independent control-only route witnesses for every course. `npx tsx tests/probe-routes.ts` prints the24 route outcomes. `npx tsx tests/browser-play.ts` runs the actual-pointer/keyboard browser checks on the running server; it writes intermediate captures under ignored `tests/captures/`. The browser QA uses Metal on macOS; software SwiftShader performance is substantially slower.
+`npm test` runs41 pure flight rules and independent control-only route witnesses for every course. `npx tsx tests/probe-routes.ts` prints the24 route outcomes. `npx tsx tests/browser-play.ts` runs the actual-pointer/keyboard browser checks on the running server; it writes intermediate captures under ignored `tests/captures/`. The browser QA uses Metal on macOS; software SwiftShader performance is substantially slower.
 
 `window.render_game_to_text()` reports mode, coordinates, course targets, environmental fields, model loading, medals and measured frame rate. `window.advanceTime(ms)` advances deterministic fixed steps while honoring pause; it does not change controls or inject outcomes. Calling it switches to manual time for that page until reload.
 
 See [game identity](GAME_IDENTITY.md), [all24 curriculum mappings](CURRICULUM.md), [playtest evidence](PLAYTEST.md), and [target comparison](VISUAL_REVIEW.md). Generated [day/night design targets](docs/visual-targets/) were created and inspected before implementation, followed by the Tripo pass. They are mockups, not built-game evidence. Actual browser captures are stored under `docs/captures/` as verification completes.
 
 Public repository: [AceDZN/windshift-riders](https://github.com/AceDZN/windshift-riders). Production deployment is future work.
+
+The original soaring extension was checked against the [FAA Glider Flying Handbook weather chapter](https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/glider_handbook/gfh_chapter_9.pdf). Workbook source snapshots and canonical module URLs are preserved in `docs/curriculum/`. Neither those sources nor this game imply Ministry approval.
+
+Current evidence: all24 courses have control-only finish witnesses; browser routes1/8/11/12/14/24 finish with actual pointer/keyboard controls. Failure/retry, touch, hints, assist, saved first-run evidence, mute and fullscreen checks pass. The static resource transfer measured about2.51MB on this Mac, with60FPS in a1440×900 Chromium Metal ready view. Software rendering is much slower. Native OS focus-loss integration and student usability/learning are not established by these tests; the pause/blur handler and deterministic pause are checked. `node scripts/verify-static.mjs` reproduces the built-preview offline check.

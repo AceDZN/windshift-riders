@@ -1,0 +1,47 @@
+{
+  "staticBuild": true,
+  "offlineAfterLoad": true,
+  "modelLoaded": true,
+  "mute": true,
+  "measuredReadyFps": 60,
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "renderer": "Chromium Metal on this Mac",
+  "resourceTransferBytes": 2507799,
+  "externalRequests": [],
+  "errors": [],
+  "resources": [
+    {
+      "name": "http://localhost:4301/assets/index-BPDXZJiF.js",
+      "transferSize": 173669,
+      "encodedBodySize": 173369
+    },
+    {
+      "name": "http://localhost:4301/assets/index-DDTJQgYA.css",
+      "transferSize": 3250,
+      "encodedBodySize": 2950
+    },
+    {
+      "name": "http://localhost:4301/models/sailplane.glb",
+      "transferSize": 2317252,
+      "encodedBodySize": 2316952
+    },
+    {
+      "name": "http://localhost:4301/assets/assistant-hebrew-400-normal-BaQtOmbn.woff2",
+      "transferSize": 4540,
+      "encodedBodySize": 4240
+    },
+    {
+      "name": "http://localhost:4301/assets/assistant-hebrew-600-normal-DM_XHISn.woff2",
+      "transferSize": 4540,
+      "encodedBodySize": 4240
+    },
+    {
+      "name": "http://localhost:4301/assets/assistant-hebrew-700-normal-DbcUQTwo.woff2",
+      "transferSize": 4548,
+      "encodedBodySize": 4248
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+# Visual review
+
+## Reference stage
+
+Built-in imagegen created `docs/visual-targets/day-target.png` and `night-target.png` before implementation, after GAME_IDENTITY.md. Both outputs were visually inspected. Exact prompts, mode, source output paths and first inspection are preserved in `docs/visual-targets/README.md`.
+
+The day target establishes a close chase view, lower-third cream/teal sailplane, readable chalk ridge and saddle, Mediterranean water to the west, warm ochre relief, atmospheric horizon, a previous-attempt ghost and sparse Hebrew instruments. The night target establishes a distinct blue/ochre coast and a safe moonlit landing shelf. These are design targets, not runtime evidence.
+
+Deliberate interpretation: use simpler painted browser geometry than the photoreal target's high-frequency landscape detail. Keep instrument footprint closer to the day target; the generated night target has too many large gauges. Keep dust/leaves subtle rather than copying the image's bright thermal spiral. HTML Hebrew will use correct RTL even though generated type is imperfect.
+
+## Runtime comparison
+
+Actual browser play was inspected at 1440×900 after runtime Tripo integration. Evidence: `docs/captures/day-first-pass.png` (level 1) and `night-first-pass.png` (level 14), with target/actual sheets `day-comparison-first-pass.jpg` and `night-comparison-first-pass.jpg`. The daytime capture came from the lead’s real Enter launch; the independent night capture used Enter plus ArrowLeft and deterministic `advanceTime` stepping. No player/win state was injected. Level 14 state reported flying, modelLoaded true, windX -7, sun 0, no solution overlay, 1.12 simulated seconds.
+
+| Target property | Actual first pass | Review |
+|---|---|---|
+| Close chase camera and horizon | Glider in lower third, broad open horizon, coast and next flags visible | Matches the composition; no camera/UI obstruction of next turn |
+| Identity-defining Tripo glider | Real GLB, teal wings, dark canopy, unpowered nose | Silhouette works; fuselage is too saturated yellow versus cream target |
+| Chalk coast and ochre relief | 3D hills, sea to west, pale steep surfaces, trees and houses | Deliberate lower-detail painted geometry; increase pale face contrast for ridge readability |
+| Sparse Hebrew instruments | Small header, mission, score, wind, altitude, two gauges and compact map | Matches day target footprint; correct HTML Hebrew replaces imperfect generated text |
+| Cloud shape and motion | Sculpted cloud groups and sea strokes | First pass creates an obvious diagonal bead string that overlaps brand; scatter and soften undersides |
+| Night coast and horizon | Distinct blue palette, readable bank, safe shelf and reversed wind | Readable; moon is too small/dim and settlements lack the target’s warm lights |
+| Natural cues/optional help | Cloth gates, wind arrow, small particles, optional help separate | No giant universal glowing answer column in inspected night state |
+| Verbs and feedback | Banking shown by real control input; objective changes are in world | Failure/retry/finish evidence is maintained in PLAYTEST.md; these frames alone do not establish fun or learning |
+
+Required first-pass fixes sent to lead: irregularly space clouds and avoid brand area; lighten yellow fuselage while retaining teal wings; strengthen chalk slope contrast; add a modest readable moon and a few warm settlement lights at night. The renderer changes were rechecked in the next section. FPS from a short capture is not used as a performance claim.
+
+## Refined browser recheck
+
+A second independent capture pass used real Enter launch and held bank controls in levels 7, 14 and 24. The renderer update was inspected visually in `docs/captures/day-final.png`, `night-final.png` and `final-expedition.png`. `art-capture-evidence.json` records the corresponding levels, bank state, sampled wind/sun, solution-overlay state, successful runtime model loading and empty application error lists. The side-by-side final sheets are `day-comparison-final.jpg` and `night-comparison-final.jpg`.
+
+- The selective material adjustment now renders a warm cream fuselage with teal wings, resolving the source model’s lemon-yellow mismatch.
+- Clouds are irregularly spaced, smaller in visual footprint and softer underneath; the former diagonal bead string is gone. HUD and next turn remain readable.
+- Pale faceted relief now separates steeper chalk faces from ochre ground. Coast, saddle and height decisions are readable at chase distance.
+- Day and night retain distinct lighting, usable horizon and the same restrained Hebrew instruments. The enlarged moon is visible; localized warm window geometry is implemented, though the initial coast capture does not show the dense luminous settlement of the target.
+- The final level preserves the camera/glider/HUD language while showing a higher ridge and multiple route markers, with the solution overlay absent.
+
+The planned camera, glider identity, HUD footprint, readable bank verb and broad coast/ridge art direction are met. The remaining deliberate detail gap is lower-frequency procedural terrain/trees/houses, a flatter sea and less atmospheric scattering than the generated target. This build does not reproduce the target’s photoreal micro-detail, distant settlement density or bright moon reflection. The final moon-fog refinement was applied and independently recaptured: the moon now renders bright cream, resolving the earlier dim disc. The actual frames are genuine browser renderings and are labeled separately from design mockups. Browser playtesting and curriculum/rule evidence remain in PLAYTEST.md and CURRICULUM.md; no learning-gain claim follows from these pictures.
+
+Final bounded refresh: `night-final.png` and `night-comparison-final.jpg` were regenerated after the moon material disabled fog. `rain-shadow-final.png` captures actual level 18 launch/bank with a greener, denser western slope and a drier, sparser eastern side; this is an illustrative long-term landscape presentation, not precipitation changing instantly in flight. Both refreshed captures reported modelLoaded true and no application errors. Physics was unchanged.

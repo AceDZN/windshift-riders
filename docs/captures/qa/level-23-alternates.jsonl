@@ -1,0 +1,2 @@
+{"name":"supported","mode":"landed","time":72.5333333333305,"gate":1,"maxY":306.7044622754662,"score":3691.980505645679,"pathLength":1970.9903990664864,"decision":true,"position":[94.1014068223102,28.836177092429132,-1140.243707699124],"speed":13,"traceSamples":362}
+{"name":"direct","mode":"landed","time":47.36666666666526,"gate":1,"maxY":175,"score":3489.4744999867926,"pathLength":1378.0798721408364,"decision":false,"position":[98.66150881778046,28.77672841028066,-1188.4755808325413],"speed":13,"traceSamples":236}

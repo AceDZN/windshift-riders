@@ -81,3 +81,9 @@ export function pilot(s:FlightState,l:Level,m:PilotMemory):Input {
   }
   return {bank:steer(s,l,target.x,target.z),pitch,brake};
 }
+
+/** Direct gate approach without a climbing orbit; normal controls still obey all fields. */
+export function directPilot(s:FlightState,l:Level,m:PilotMemory):Input {
+ const g=l.gates[s.gate];
+ return g?{bank:steer(s,l,g.x,g.z),pitch:0,brake:false}:pilot(s,l,m);
+}

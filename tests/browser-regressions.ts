@@ -1,0 +1,37 @@
+import {chromium} from 'playwright';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+const browser=await chromium.launch({headless:true,args:['--use-angle=metal','--enable-gpu','--ignore-gpu-blocklist']});
+const context=await browser.newContext({viewport:{width:1280,height:720},reducedMotion:'reduce'});
+const p=await context.newPage();const errors:string[]=[];p.on('pageerror',e=>errors.push(String(e)));p.on('console',m=>{if(m.type()==='error')errors.push(m.text());});
+const read=async()=>JSON.parse(await p.evaluate(()=>(window as any).render_game_to_text()));
+const advance=async(ms:number)=>p.evaluate(t=>(window as any).advanceTime(t),ms);
+const report:any={date:'2026-10-31',checks:[],errors};
+try{
+ await p.goto('http://localhost:5301/?level=8',{waitUntil:'networkidle'});await advance(0);
+ await p.locator('#start-btn').click();await advance(1000);await p.keyboard.press('h');
+ let data=await read();assert.equal(data.progress['8'].starts,1);assert.equal(data.progress['8'].hintedRuns,1);assert.equal(data.progress['8'].firstRun.hinted,true);
+ await p.keyboard.press('h');await p.keyboard.press('h');assert.equal((await read()).progress['8'].hintedRuns,1,'same-run hints counted once');
+ await p.keyboard.press('r');data=await read();const record=data.progress['8'];
+ assert.equal(record.starts,2);assert.equal(record.retries,1);assert.equal(record.firstRun.outcome,'retry');assert.equal(record.firstRun.hinted,true);assert.equal(data.usedHint,false);
+ assert.equal(await p.locator('#toast').evaluate(e=>e.classList.contains('visible')),false);assert.equal(await p.locator('#toast').textContent(),'');
+ report.checks.push({check:'mid-flight retry preserves first hinted run, starts/retries and clears visible aid',pass:true,record});
+ await p.keyboard.press('r');assert.equal((await read()).progress['8'].starts,3);assert.equal((await read()).progress['8'].retries,2);
+ await p.locator('#courses').click();await p.locator('[data-level="13"]').click();await p.locator('#assist').check();await p.locator('#start-btn').click();await advance(1000);
+ data=await read();assert.equal(data.assist,true);assert.equal(data.progress['14'].assistedRuns,1);assert.equal(data.progress['14'].firstRun.assisted,true);assert.equal(data.medals.environment,false);
+ assert.ok(data.time<1,'assist slows simulated time');
+ report.checks.push({check:'assist is recorded separately and slows time without an environment medal',pass:true,gameSecondsAfter1s:data.time});
+ await p.keyboard.press('Escape');const before=await read();await advance(3000);const after=await read();assert.deepEqual([after.time,after.player],[before.time,before.player]);await p.keyboard.press('Escape');
+ const other=await context.newPage();await other.goto('about:blank');await other.bringToFront();await p.waitForTimeout(100);
+ const focusState=await read();const nativeBlurObserved=focusState.mode==='paused';
+ await other.close();await p.bringToFront();
+ if(!nativeBlurObserved)await p.evaluate(()=>window.dispatchEvent(new Event('blur')));
+ assert.equal((await read()).mode,'paused');await p.keyboard.press('Escape');
+ report.checks.push({check:'blur event handler pauses flight; pause stops advanceTime',pass:true,nativeBlurObserved,note:nativeBlurObserved?'Actual tab switch emitted blur':'Headless and headed Playwright tab switches did not emit OS blur here; browser blur event dispatched explicitly. Native focus-loss integration remains unverified.'});
+ await p.keyboard.press('m');assert.match(await p.locator('#mute').textContent()||'',/כבוי/);await p.keyboard.press('m');
+ await p.keyboard.press('f');await p.waitForTimeout(100);assert.equal(await p.evaluate(()=>!!document.fullscreenElement),true);await p.keyboard.press('f');
+ report.checks.push({check:'M mute toggle and F fullscreen toggle respond',pass:true});
+ await p.setViewportSize({width:390,height:844});await p.screenshot({path:'docs/captures/qa/portrait-final.png'});
+ await p.goto('http://localhost:5301/?level=8',{waitUntil:'networkidle'});await advance(0);data=await read();assert.equal(data.progress['8'].firstRun.hinted,true);assert.equal(data.progress['8'].retries,2);report.checks.push({check:'first aid/retry evidence survives reload',pass:true});
+ assert.equal(errors.length,0,errors.join('\n'));report.complete=true;
+}finally{fs.writeFileSync('docs/captures/qa/regressions.json',JSON.stringify(report,null,2));await browser.close();}

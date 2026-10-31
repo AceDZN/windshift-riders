@@ -1,0 +1,54 @@
+[
+  {
+    "capture": "day-final.png",
+    "method": "real Enter launch, ArrowLeft/ArrowRight hold, deterministic advanceTime; no state injection",
+    "level": 7,
+    "mode": "flying",
+    "modelLoaded": true,
+    "modelError": "",
+    "bank": 0.217,
+    "windX": 1,
+    "sun": 1,
+    "overlay": true,
+    "errors": []
+  },
+  {
+    "capture": "final-expedition.png",
+    "method": "real Enter launch, ArrowLeft/ArrowRight hold, deterministic advanceTime; no state injection",
+    "level": 24,
+    "mode": "flying",
+    "modelLoaded": true,
+    "modelError": "",
+    "bank": 0.217,
+    "windX": 8,
+    "sun": 1,
+    "overlay": false,
+    "errors": []
+  },
+  {
+    "capture": "night-final.png",
+    "method": "real Enter launch, ArrowLeft/ArrowRight hold, deterministic advanceTime; no state injection",
+    "level": 14,
+    "mode": "flying",
+    "modelLoaded": true,
+    "modelError": "",
+    "bank": -0.217,
+    "windX": -7,
+    "sun": 0,
+    "overlay": false,
+    "errors": []
+  },
+  {
+    "capture": "rain-shadow-final.png",
+    "method": "real Enter launch, ArrowLeft/ArrowRight hold, deterministic advanceTime; no state injection",
+    "level": 18,
+    "mode": "flying",
+    "modelLoaded": true,
+    "modelError": "",
+    "bank": 0.217,
+    "windX": 10,
+    "sun": 1,
+    "overlay": false,
+    "errors": []
+  }
+]

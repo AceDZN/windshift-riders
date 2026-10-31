@@ -6,7 +6,7 @@
 - Acquisition: normal Tripo Studio UI in the user's Chrome, dedicated `🪁 Windshift Riders` tab 512281213; My Assets inspected first. No raw API calls, hidden credentials, or another crew's tab.
 - Basis: original text prompt commissioned by the user on their signed-in Tripo account. No gallery asset or third-party character used. The account menu visibly showed Pro, and generation was Private. [Tripo official paid-output rights](https://www.tripo3d.ai/help/privacy-policy/how-to-use-tripo-models-commercially) include use, modification and distribution; the [official pricing documentation](https://www.tripo3d.ai/product-doc/getting-started/pricing-credits) confirms private paid outputs are user-owned. Those visible conditions supply the packaging basis. No new agreement was accepted.
 - Generation settings: HD Model, H3.1 Best Quality, Geometry & Texture, Private, no 8K trial, no parts trial.
-- Displayed cost: 30 credits before submission. Own crew spend: 30 / 600 credits, 1 / 3 model generations. Balance shown 3,200 before and 3,140 after submission; the account is shared by simultaneous crews, so the balance delta is not an exclusive crew cost ledger. No purchase or upgrade.
+- Displayed cost: 30 credits before submission. Own crew spend: 30 / 600 credits, 2 / 3 total generation attempts including the free quality retry. Balance shown 3,200 before and 3,140 after submission; the account is shared by simultaneous crews, so the balance delta is not an exclusive crew cost ledger. No purchase or upgrade.
 - Rigid vehicle: no skeleton, rig or animation clips required; runtime banking/pitch is a rigid transform. No deforming pilot.
 - Runtime path: `public/models/sailplane.glb`.
 
@@ -16,7 +16,7 @@ Exact submitted prompt:
 
 Final retry output downloaded successfully via normal GLB Export, 2k textures. Source/runtime size: 2,316,952 bytes (2.21 MiB); no lossy optimization needed to meet the <=3 MB target. SHA-256 `463c162885f675fe06725c81f5901978cfbe8f2ea48edb7eebf90720222f10d2`. One mesh/node, 19,336 faces, 11,848 vertices, 3 embedded images; no external URI, skins, or animation clips. Packaging validation: `python3 scripts/art-inspect-glb.py public/models/sailplane.glb`; machine-readable result in `docs/visual-targets/sailplane-packaging.json`.
 
-Final source coordinates: Y up; wings along Z; nose points toward -X (tail fin high vertices at +X). Bounds X[-0.29727,0.29727], Y[0,0.17140], Z[-0.5,0.5]. To align game forward +Z, rotate Y by +π/2, then center using Box3. Width after rotation is1 source unit, length0.5945. Rigid flight transforms apply to a parent group. The inspected retry has no propeller; original rejected version remains intermediate only.
+Final source coordinates: Y up; wings along Z; nose points toward -X (tail fin high vertices at +X). Bounds X[-0.29727,0.29727], Y[0,0.17140], Z[-0.5,0.5]. Runtime aligns game forward -Z with Y rotation -π/2, then centers using Box3 and normalizes span to 21 game metres. Width after rotation is 1 source unit, length 0.5945. Rigid flight transforms apply to a parent group. The temporary asset viewer uses the opposite +Z orientation simply to inspect the nose. The inspected retry has no propeller; original rejected version remains intermediate only.
 
 ## Design targets
 
@@ -34,4 +34,12 @@ Exact retry prompt:
 
 > A pure unpowered sailplane glider, extremely long slender straight wings, wingspan three times fuselage length, NOT an airplane. Smooth rounded cream nose entirely bare, no propeller, no rotor, no engine, no motor, no nose rods, no landing gear. Single cream slender teardrop fuselage with small dark blue bubble canopy, long thin teal wings with cream tips, ochre T tail. Original Windshift Riders stylized painted low-poly game asset, clean rigid connected geometry, whole aircraft only, wings level, no person, no ground, no text, no logo.
 
-Model load/appearance verification: a separate temporary Three.js GLTFLoader viewer loaded the final packaged GLB through the running local Vite server without application errors; top-oblique inspection is `docs/visual-targets/model-inspection.png` (asset inspection, not gameplay). This confirmed attached wings, smooth unpowered nose and final orientation. Generated fuselage is warmer yellow/ochre than the cream design target, with teal wings and dark canopy; the palette variation is recorded rather than disguising the target as achieved.
+Model load/appearance verification: a separate temporary Three.js GLTFLoader viewer loaded the final packaged GLB through the running local Vite server without application errors; top-oblique inspection is `docs/visual-targets/model-inspection.png` (asset inspection, not gameplay). This confirmed attached wings, smooth unpowered nose and final orientation. The source inspection shows a warmer yellow/ochre fuselage than the cream design target, with teal wings and dark canopy. The runtime shader correction described below resolves that source palette mismatch.
+
+Rejected first-version source (intermediate only): 2,643,480 bytes; SHA-256 `20c86bc7df00223b6a9efdbc8decb4f2189f3246ed411584e5f3f1b1d4263a48`. It is not packaged or rendered. Final observed shared account balance was 3,050, without any further crew spending; concurrent jobs make that an account snapshot only.
+
+Runtime palette adjustment: Three.js material shader selectively moves the source yellow fuselage toward warm cream and preserves teal wing texture. The packaged GLB bytes remain unchanged. Actual day/night browser captures confirm the adjustment rendered successfully; this is a visual material treatment, not changed flight geometry or an added rig.
+
+## Bundled Hebrew font
+
+Assistant Hebrew weights400/600/700 from pinned `@fontsource/assistant@5.3.0`, SIL Open Font License1.1. The license is distributed as `public/licenses/Assistant-OFL.txt`. Font files are bundled by Vite; no Google Fonts request is made at runtime.

@@ -1,0 +1,61 @@
+{
+  "date": "2026-10-31",
+  "checks": [
+    {
+      "check": "mid-flight retry preserves first hinted run, starts/retries and clears visible aid",
+      "pass": true,
+      "record": {
+        "score": 0,
+        "medals": {
+          "finish": false,
+          "control": false,
+          "environment": false
+        },
+        "attempts": 1,
+        "starts": 2,
+        "retries": 1,
+        "hintedRuns": 1,
+        "assistedRuns": 0,
+        "lastRuns": [
+          {
+            "outcome": "retry",
+            "hinted": true,
+            "assisted": false,
+            "decision": false,
+            "gates": 0,
+            "seconds": 1
+          }
+        ],
+        "firstRun": {
+          "outcome": "retry",
+          "hinted": true,
+          "assisted": false,
+          "decision": false,
+          "gates": 0,
+          "seconds": 1
+        }
+      }
+    },
+    {
+      "check": "assist is recorded separately and slows time without an environment medal",
+      "pass": true,
+      "gameSecondsAfter1s": 0.65
+    },
+    {
+      "check": "blur event handler pauses flight; pause stops advanceTime",
+      "pass": true,
+      "nativeBlurObserved": false,
+      "note": "Headless and headed Playwright tab switches did not emit OS blur here; browser blur event dispatched explicitly. Native focus-loss integration remains unverified."
+    },
+    {
+      "check": "M mute toggle and F fullscreen toggle respond",
+      "pass": true
+    },
+    {
+      "check": "first aid/retry evidence survives reload",
+      "pass": true
+    }
+  ],
+  "errors": [],
+  "complete": true
+}

@@ -1,0 +1,183 @@
+{
+  "date": "2026-10-31",
+  "method": "Actual Playwright pointer/keyboard controls; advanceTime only steps time. No flight-state mutation.",
+  "routes": [
+    {
+      "id": 1,
+      "mode": "landed",
+      "time": 36.75,
+      "gate": 1,
+      "medals": {
+        "finish": true,
+        "control": false,
+        "environment": true
+      },
+      "usedHint": false,
+      "modelLoaded": true,
+      "wind": {
+        "lift": 0.002187793998410949,
+        "thermal": 0.004861764440913219,
+        "ridge": 0,
+        "windX": 1,
+        "windZ": 0,
+        "sun": 1,
+        "shadow": 0,
+        "source": "קרקע יבשה · שמש ישירה"
+      },
+      "overlay": true
+    },
+    {
+      "id": 8,
+      "mode": "landed",
+      "time": 78.2,
+      "gate": 1,
+      "medals": {
+        "finish": true,
+        "control": false,
+        "environment": true
+      },
+      "usedHint": false,
+      "modelLoaded": true,
+      "wind": {
+        "lift": 2.466348377795542e-20,
+        "thermal": 5.480774172878982e-20,
+        "ridge": 0,
+        "windX": 2,
+        "windZ": 0,
+        "sun": 1,
+        "shadow": 0,
+        "source": "קרקע יבשה · שמש ישירה"
+      },
+      "overlay": false
+    },
+    {
+      "id": 11,
+      "mode": "landed",
+      "time": 94.2,
+      "gate": 1,
+      "medals": {
+        "finish": true,
+        "control": false,
+        "environment": true
+      },
+      "usedHint": false,
+      "modelLoaded": true,
+      "wind": {
+        "lift": -3.059295222560183,
+        "thermal": 0,
+        "ridge": -6.798433827911517,
+        "windX": -10,
+        "windZ": 0,
+        "sun": 1,
+        "shadow": 0,
+        "source": "צד חסוי · אוויר יורד"
+      },
+      "overlay": true
+    },
+    {
+      "id": 12,
+      "mode": "landed",
+      "time": 117.93,
+      "gate": 2,
+      "medals": {
+        "finish": true,
+        "control": false,
+        "environment": true
+      },
+      "usedHint": false,
+      "modelLoaded": true,
+      "wind": {
+        "lift": 2.0428128660352574,
+        "thermal": 0,
+        "ridge": 4.539584146745017,
+        "windX": 9,
+        "windZ": -5,
+        "sun": 1,
+        "shadow": 0,
+        "source": "מדרון מול הרוח · אוויר עולה"
+      },
+      "overlay": false
+    },
+    {
+      "id": 14,
+      "mode": "landed",
+      "time": 41.77,
+      "gate": 1,
+      "medals": {
+        "finish": true,
+        "control": false,
+        "environment": true
+      },
+      "usedHint": false,
+      "modelLoaded": true,
+      "wind": {
+        "lift": 0,
+        "thermal": 0,
+        "ridge": 0,
+        "windX": -7,
+        "windZ": 0,
+        "sun": 0,
+        "shadow": 0,
+        "source": "אוויר שקט"
+      },
+      "overlay": false
+    },
+    {
+      "id": 24,
+      "mode": "landed",
+      "time": 110.35,
+      "gate": 2,
+      "medals": {
+        "finish": true,
+        "control": false,
+        "environment": true
+      },
+      "usedHint": false,
+      "modelLoaded": true,
+      "wind": {
+        "lift": -2.1525213848325317,
+        "thermal": 2.2386128723320456e-49,
+        "ridge": -4.783380855183403,
+        "windX": 8,
+        "windZ": 0,
+        "sun": 1,
+        "shadow": 0,
+        "source": "צד חסוי · אוויר יורד"
+      },
+      "overlay": false
+    }
+  ],
+  "checks": [
+    {
+      "check": "local progress persisted after reload",
+      "pass": true
+    },
+    {
+      "check": "stage3 safe failure and R immediate retry",
+      "pass": true,
+      "retryWallMs": 273
+    },
+    {
+      "check": "Escape pause freezes advanceTime; Escape resumes",
+      "pass": true
+    },
+    {
+      "check": "H hint records aid",
+      "pass": true
+    },
+    {
+      "check": "retry clears current-run hint state",
+      "pass": true
+    },
+    {
+      "check": "live resize preserves single-canvas flight",
+      "pass": true
+    },
+    {
+      "check": "mobile touch stick changes bank, held brake reduces speed, touch retry relaunches",
+      "pass": true
+    }
+  ],
+  "errors": [],
+  "complete": true
+}

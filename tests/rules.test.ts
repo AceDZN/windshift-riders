@@ -132,7 +132,7 @@ test('landing requires the meadow, every course gate and a controlled speed', ()
  const l=still();
  for(const variant of ['valid','missed-gate','outside','too-fast']){
   const x=l.landing.x+(variant==='outside'?l.landing.r+100:0),z=l.landing.z;
-  const s=start(l,x,terrainHeight(l,x,z)+4.001,z);
+  const s=start(l,x,terrainHeight(l,x,z)+3.5,z);
   s.gate=variant==='missed-gate'?0:l.gates.length;
   s.speed=variant==='too-fast'?42:28;
   step(s,l,{bank:0,pitch:0,brake:false},1/60);

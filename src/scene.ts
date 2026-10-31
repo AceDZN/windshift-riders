@@ -14,7 +14,12 @@ export class FlightScene{
   this.ghost=new T.Line(new T.BufferGeometry(),new T.LineDashedMaterial({color:'#d7edf0',transparent:true,opacity:.32,dashSize:10,gapSize:7}));
   this.scene.add(this.trail,this.ghost);this.buildFallback();
   new GLTFLoader().load(import.meta.env.BASE_URL+'models/sailplane.glb',g=>{
-   const model=g.scene;const box=new T.Box3().setFromObject(model);const size=box.getSize(new T.Vector3());
+   const model=g.scene;
+   model.traverse(o=>{if(o instanceof T.Mesh){const materials=Array.isArray(o.material)?o.material:[o.material];for(const material of materials){if(material instanceof T.MeshStandardMaterial){material.roughness=.82;material.metalness=0;material.onBeforeCompile=shader=>{shader.fragmentShader=shader.fragmentShader.replace('#include <map_fragment>',`#include <map_fragment>
+     float creamMask = smoothstep(0.28,0.65,diffuseColor.r) * smoothstep(0.24,0.6,diffuseColor.g) * (1.0-smoothstep(0.16,0.44,diffuseColor.b)) * smoothstep(-0.03,0.08,diffuseColor.r-diffuseColor.g);
+     diffuseColor.rgb = mix(diffuseColor.rgb,vec3(0.88,0.82,0.65),creamMask*0.86);
+   `);};material.customProgramCacheKey=()=>'windshift-cream-v1';}}}});
+   const box=new T.Box3().setFromObject(model);const size=box.getSize(new T.Vector3());
    // Tripo exports differ; asset owner confirms local forward axis before delivery.
    const pivot=new T.Group();pivot.add(model);model.position.sub(box.getCenter(new T.Vector3()));
    pivot.scale.setScalar(21/Math.max(size.x,size.y,size.z));
@@ -36,9 +41,10 @@ export class FlightScene{
    const x=pos.getX(i),z=pos.getZ(i);let y=terrainHeight(l,x,z);pos.setY(i,y);
    const slope=Math.hypot(terrainHeight(l,x+4,z)-terrainHeight(l,x-4,z),terrainHeight(l,x,z+4)-terrainHeight(l,x,z-4))/8;
    col.set(l.desert?'#b78c57':'#b99d6d');
-   if(y>55)col.set('#bfa879');if(slope>.6)col.set('#dfd3ae');if(slope>1.1)col.set('#ebdec0');
+   if(y>55)col.set('#bfa879');if(slope>.43&&y>45)col.set('#e6d8b9');if(slope>.8)col.set('#f1e4cb');if(slope>.43)col.multiplyScalar(.93+.07*Math.sin(y*.3));
    if(x<coastX(z)+32)col.set('#eee0b8');
    for(const p of l.patches){const d=Math.hypot(x-p.x,z-p.z)/p.r;if(d<1.2)col.lerp(new T.Color(p.color),Math.max(0,1-d*.6));}
+   if(l.rainShadow&&slope<.43){const east=Math.min(1,Math.max(0,(x-60)/270));col.lerp(new T.Color('#718762'),(1-east)*.55);col.lerp(new T.Color('#c89e6a'),east*.65);}
    const noise=.96+.045*Math.sin(x*.19+z*.06)+.025*Math.cos(z*.21);col.multiplyScalar(noise);colors.set([col.r,col.g,col.b],i*3);
   }
   ground.setAttribute('color',new T.BufferAttribute(colors,3));ground.computeVertexNormals();
@@ -49,24 +55,25 @@ export class FlightScene{
   this.world.add(new T.LineSegments(new T.BufferGeometry().setAttribute('position',new T.Float32BufferAttribute(seaStrokes,3)),new T.LineBasicMaterial({color:night?'#638196':'#b5d4cf',transparent:true,opacity:.26})));
   // Sparse cypress, orchards, and chalk boulders belong to the relief rather than a floating diorama.
   const treeGeo=new T.ConeGeometry(3,13,5),trunkGeo=new T.CylinderGeometry(.6,.9,5,4);const trees=new T.InstancedMesh(treeGeo,this.mat(night?'#243c3d':'#566b44'),220);const trunks=new T.InstancedMesh(trunkGeo,this.mat('#846b48'),220);let count=0;const dummy=new T.Object3D();
-  for(let i=0;i<420&&count<220;i++){const x=-280+(i*83%1500),z=420-(i*157%2400);if(x<coastX(z)+40||Math.hypot(x-l.landing.x,z-l.landing.z)<l.landing.r+30||l.desert&&i%4)continue;const y=terrainHeight(l,x,z);if(y>250)continue;dummy.position.set(x,y+7,z);dummy.scale.setScalar(.65+(i%7)*.12);dummy.updateMatrix();trees.setMatrixAt(count,dummy.matrix);dummy.position.y=y+2;dummy.updateMatrix();trunks.setMatrixAt(count,dummy.matrix);count++;}trees.count=count;trunks.count=count;this.world.add(trees,trunks);
+  for(let i=0;i<420&&count<220;i++){const x=-280+(i*83%1500),z=420-(i*157%2400);if(x<coastX(z)+40||Math.hypot(x-l.landing.x,z-l.landing.z)<l.landing.r+30||l.desert&&i%4)continue;const y=terrainHeight(l,x,z);if(y>250||l.rainShadow&&x>150&&i%4!==0)continue;dummy.position.set(x,y+7,z);dummy.scale.setScalar(.65+(i%7)*.12);dummy.updateMatrix();trees.setMatrixAt(count,dummy.matrix);dummy.position.y=y+2;dummy.updateMatrix();trunks.setMatrixAt(count,dummy.matrix);count++;}trees.count=count;trunks.count=count;this.world.add(trees,trunks);
   for(let i=0;i<24;i++){
-   const x=430+(i*173%1300),z=100-(i*217%2600),y=terrainHeight(l,x,z);const b=this.mesh(new T.BoxGeometry(11,8,13),night?'#b5a27d':'#e2cfa7',x,y+4,z);this.world.add(b);const roof=this.mesh(new T.ConeGeometry(10,4,4),'#a56c4c',x,y+10,z);roof.rotation.y=Math.PI/4;this.world.add(roof);if(night)this.world.add(this.mesh(new T.SphereGeometry(1,5,4),'#ffd38b',x,y+5,z+7));
+   const x=430+(i*173%1300),z=100-(i*217%2600),y=terrainHeight(l,x,z);const b=this.mesh(new T.BoxGeometry(11,8,13),night?'#b5a27d':'#e2cfa7',x,y+4,z);this.world.add(b);const roof=this.mesh(new T.ConeGeometry(10,4,4),'#a56c4c',x,y+10,z);roof.rotation.y=Math.PI/4;this.world.add(roof);if(night){const glow=new T.Mesh(new T.PlaneGeometry(3,2),new T.MeshBasicMaterial({color:'#ffe2a0',side:T.DoubleSide}));glow.position.set(x,y+5,z+6.6);this.world.add(glow);}
   }
   l.gates.forEach((g,i)=>{const group=new T.Group();for(const dx of [-g.r,g.r]){group.add(this.mesh(new T.CylinderGeometry(.6,.8,24,5),'#f1e6c5',dx,-12,0));const fabric=this.mesh(new T.PlaneGeometry(14,18),i?'#e3b45e':'#ecce88',dx+7,-4,0);(fabric.material as T.MeshStandardMaterial).side=T.DoubleSide;group.add(fabric);}group.position.set(g.x,g.y,g.z);this.flags.push(group);this.world.add(group);});
   const lp=l.landing;const runway=this.mesh(new T.PlaneGeometry(72,lp.r*2.1),'#749174',lp.x,24.5,lp.z);runway.rotation.x=-Math.PI/2;this.world.add(runway);
   const lineMat=new T.LineBasicMaterial({color:night?'#ffe0a1':'#f9eccc'});for(const x of [-36,36]){const pts=[new T.Vector3(lp.x+x,25.2,lp.z-lp.r),new T.Vector3(lp.x+x,25.2,lp.z+lp.r)];this.world.add(new T.Line(new T.BufferGeometry().setFromPoints(pts),lineMat));}
   for(let i=0;i<8;i++){const dash=this.mesh(new T.PlaneGeometry(2.3,9),'#f5e3bd',lp.x,25.3,lp.z-lp.r+i*lp.r/4);dash.rotation.x=-Math.PI/2;this.world.add(dash);}
-  for(const dx of [-45,45]){const pole=this.mesh(new T.CylinderGeometry(.7,.7,22,5),'#ede0bb',lp.x+dx,35,lp.z);this.world.add(pole);const sock=this.mesh(new T.ConeGeometry(3.4,14,8),'#df9350',lp.x+dx+6,45,lp.z);sock.rotation.z=-Math.PI/2;this.world.add(sock);}
-  for(let i=0;i<19;i++){
-   const c=new T.Group();for(let j=0;j<5;j++){const cloud=this.mesh(new T.IcosahedronGeometry(1,2),night?'#65788b':'#f1eee0',j*27,Math.sin(j*2)*8,Math.cos(j)*16);cloud.scale.set(39,16+j%2*7,24);c.add(cloud);}c.position.set(-1000+(i*317%2700),490+(i%4)*45,300-(i*293%3000));this.clouds.push(c);this.world.add(c);
+  for(const dx of [-45,45]){const pole=this.mesh(new T.CylinderGeometry(.7,.7,22,5),'#ede0bb',lp.x+dx,35,lp.z);this.world.add(pole);const sock=this.mesh(new T.ConeGeometry(3.4,14,8),'#df9350',lp.x+dx+6,45,lp.z);sock.name='windsock';sock.userData={originX:lp.x+dx,originZ:lp.z};this.world.add(sock);}
+  const random=(n:number)=>{const t=Math.sin(n*127.1+311.7)*43758.5453;return t-Math.floor(t);};
+  for(let i=0;i<15;i++){
+   const c=new T.Group();for(let j=0;j<5;j++){const cloud=this.mesh(new T.IcosahedronGeometry(1,2),night?'#65788b':'#f1eee0',j*27,Math.sin(j*2)*8,Math.cos(j)*16);cloud.scale.set(39,16+j%2*7,24);c.add(cloud);}c.position.set(-1300+random(i+3)*3300,560+random(i+19)*260,500-random(i+43)*3700);this.clouds.push(c);this.world.add(c);
   }
   // Merge the static cloud lobes: one cloud draw call keeps software/GPU rendering responsive.
   const cloudGeometries:T.BufferGeometry[]=[];
   for(const cloud of this.clouds){cloud.updateMatrixWorld(true);cloud.traverse(o=>{if(o instanceof T.Mesh){cloudGeometries.push(o.geometry.clone().applyMatrix4(o.matrixWorld));o.geometry.dispose();(o.material as T.Material).dispose();}});this.world.remove(cloud);}
-  const cloudField=new T.Mesh(mergeGeometries(cloudGeometries),this.mat(night?'#617b91':'#f2eee2'));
-  this.world.add(cloudField);this.clouds=[];
-  const orb=this.mesh(new T.SphereGeometry(night?22:30,24,16),night?'#fff1cf':'#fff3c9',-1300,780,-2400);orb.material=new T.MeshBasicMaterial({color:night?'#fff1cf':'#fff3c9'});this.world.add(orb);
+  const cloudField=new T.Mesh(mergeGeometries(cloudGeometries),new T.MeshStandardMaterial({color:night?'#617b91':'#f7f2e5',emissive:night?'#071322':'#b3bfba',emissiveIntensity:night?.08:.25,roughness:1}));
+  cloudField.name='cloud-field';this.world.add(cloudField);this.clouds=[];
+  const orb=this.mesh(new T.SphereGeometry(night?48:30,24,16),night?'#fff1cf':'#fff3c9',-1300,780,-2400);orb.material=new T.MeshBasicMaterial({color:night?'#fff1cf':'#fff3c9',fog:false});this.world.add(orb);
   l.patches.forEach(p=>{const leaves=new T.Group();for(let i=0;i<12;i++){const leaf=this.mesh(new T.PlaneGeometry(2,1),'#e9bd69');leaf.userData={angle:i*2.4,base:i*13};leaves.add(leaf);}leaves.position.set(p.x,0,p.z);leaves.userData={patch:p};this.hints.add(leaves);});this.world.add(this.hints);
   if(l.shadow){const sh=this.mesh(new T.CircleGeometry(l.shadow.r,45),'#393e3b',l.shadow.x,0,l.shadow.z);sh.rotation.x=-Math.PI/2;sh.scale.set(1,1,1);sh.material=new T.MeshBasicMaterial({color:'#364441',transparent:true,opacity:.21,depthWrite:false});sh.name='shadow';this.world.add(sh);}
   this.trail.geometry.dispose();this.trail.geometry=new T.BufferGeometry();this.ghost.visible=false;
@@ -75,11 +82,14 @@ export class FlightScene{
  resize(){const w=this.canvas.clientWidth,h=this.canvas.clientHeight;this.renderer.setSize(w,h,false);this.camera.aspect=w/h;this.camera.updateProjectionMatrix();}
  draw(s:FlightState,dt:number,hint:boolean){
   const l=this.level;this.plane.position.set(s.x,s.y,s.z);this.plane.rotation.set(s.pitch*.16,-s.heading,-s.bank,'YXZ');
-  const behind=new T.Vector3(-Math.sin(s.heading)*29,11,Math.cos(s.heading)*29);const desired=new T.Vector3(s.x,s.y,s.z).add(behind);
+  const setback=29*Math.max(1,.85/this.camera.aspect);
+  const behind=new T.Vector3(-Math.sin(s.heading)*setback,11*Math.min(1.6,setback/29),Math.cos(s.heading)*setback);const desired=new T.Vector3(s.x,s.y,s.z).add(behind);
   if(s.time<.1||dt===0)this.camera.position.copy(desired);else this.camera.position.lerp(desired,1-Math.exp(-dt*5));
   this.camera.up.set(this.reduced?0:Math.sin(s.bank)*.06,1,0);this.camera.lookAt(s.x+Math.sin(s.heading)*100,s.y-8,-Math.cos(s.heading)*100+s.z);
   this.flags.forEach((g,i)=>{g.visible=i>=s.gate;g.children.forEach(c=>{if(c instanceof T.Mesh&&c.geometry instanceof T.PlaneGeometry)c.rotation.y=Math.sin(s.time*2+i)*.1;});});
-  for(const c of this.clouds)c.position.x+=l.wind.x*dt*.4;
+  const currentAir=airAt(l,s.x,s.y,s.z,s.time);
+  const cloudField=this.world.getObjectByName('cloud-field');if(cloudField){cloudField.position.x+=currentAir.windX*dt*.4;cloudField.position.z+=currentAir.windZ*dt*.4;}
+  this.world.children.filter(o=>o.name==='windsock').forEach(sock=>{const d=new T.Vector3(currentAir.windX,0,currentAir.windZ).normalize();if(d.lengthSq()>.1){sock.quaternion.setFromUnitVectors(new T.Vector3(0,1,0),d);sock.position.set(sock.userData.originX+d.x*6,45,sock.userData.originZ+d.z*6);}});
   for(const group of this.hints.children){const p=group.userData.patch;const lift=airAt(l,p.x,100,p.z,s.time).thermal;group.visible=lift>1&&(l.overlay||hint);for(const [i,leaf]of group.children.entries()){const a=i*2.4+s.time*.65;const y=((i*13+s.time*8)%250)+terrainHeight(l,p.x,p.z);leaf.position.set(Math.cos(a)* (20+i%6*5),y,Math.sin(a)*(20+i%6*5));leaf.rotation.set(a,0,a*.4);}}
   const shadow=this.world.getObjectByName('shadow');if(shadow&&l.shadow){shadow.position.x=l.shadow.x+l.shadow.speed*s.time;shadow.position.y=terrainHeight(l,shadow.position.x,shadow.position.z)+1;}
   if(s.trace.length>1){this.trail.geometry.dispose();this.trail.geometry=new T.BufferGeometry().setFromPoints(s.trace.slice(-50).map(p=>new T.Vector3(p.x,p.y,p.z)));}
